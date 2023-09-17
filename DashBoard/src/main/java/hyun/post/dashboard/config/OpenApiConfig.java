@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
 
     @Bean
-    public OpenAPI openAPI(@Value("version") String appVersion) {
+    public OpenAPI openAPI(@Value("${version}") String appVersion) {
 
         Info info = new Info().title("Board API Docs").version(appVersion)
                 .description("spring boot 3을 이용한 Board API Docs");
