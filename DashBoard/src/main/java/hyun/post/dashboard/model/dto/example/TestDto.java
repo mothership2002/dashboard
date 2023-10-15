@@ -1,4 +1,4 @@
-package hyun.post.dashboard.model.dto;
+package hyun.post.dashboard.model.dto.example;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

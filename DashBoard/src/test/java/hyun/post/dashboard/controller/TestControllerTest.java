@@ -1,6 +1,7 @@
 package hyun.post.dashboard.controller;
 
-import hyun.post.dashboard.model.dto.TestDto;
+import hyun.post.dashboard.controller.example.TestController;
+import hyun.post.dashboard.model.dto.example.TestDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

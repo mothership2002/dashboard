@@ -1,6 +1,6 @@
-package hyun.post.dashboard.controller;
+package hyun.post.dashboard.controller.example;
 
-import hyun.post.dashboard.model.dto.TestDto;
+import hyun.post.dashboard.model.dto.example.TestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
