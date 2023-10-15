@@ -25,4 +25,8 @@ public abstract class BaseDateColumn {
     @Comment("수정일")
     @Column(name = "MODIFIED_AT")
     private LocalDateTime modifiedAt;
+
+    @Comment("삭제일")
+    @Column(name = "DELETED_AT")
+    private LocalDateTime deletedAt;
 }

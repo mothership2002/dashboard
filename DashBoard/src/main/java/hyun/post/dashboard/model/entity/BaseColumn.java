@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -23,4 +24,8 @@ public abstract class BaseColumn extends BaseDateColumn {
     @Comment("수정자")
     @Column(name = "MODIFIED_BY")
     private Long modifiedBy;
+    
+    @Comment("삭제일")
+    @Column(name = "DELETED_BY")
+    private Long deletedBy;
 }
