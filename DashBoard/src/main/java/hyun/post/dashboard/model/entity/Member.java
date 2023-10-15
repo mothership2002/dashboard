@@ -2,6 +2,7 @@ package hyun.post.dashboard.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -42,6 +43,11 @@ public class Member extends BaseDateColumn implements UserDetails {
     private Role role;
 
 
+    public Member(String account, String password, String email) {
+        this.account = account;
+        this.password = password;
+        this.email = email;
+    }
 
     // TODO 권환 관련 공부 필요
     @Override
