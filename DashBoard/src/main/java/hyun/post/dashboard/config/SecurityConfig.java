@@ -1,18 +1,29 @@
 package hyun.post.dashboard.config;
 
+import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
+import hyun.post.dashboard.security.handler.CustomFailureHandler;
+import hyun.post.dashboard.security.handler.CustomSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final AuthenticationConfiguration config;
+    private final CustomFailureHandler failureHandler;
+    private final CustomSuccessHandler successHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,8 +36,21 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/**", "/swagger/**").permitAll())
+                .addFilterBefore(authenticationLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
         //TODO 각종 필터 달아야함
     }
 
+    @Bean
+    public AuthenticationLoginFilter authenticationLoginFilter() throws Exception {
+        return new AuthenticationLoginFilter(authenticationManager(), successHandler, failureHandler);
+    }
+
+
+    @Bean
+    public AuthenticationManager authenticationManager() throws Exception {
+        ProviderManager manager = (ProviderManager) config.getAuthenticationManager();
+//        manager.getProviders().add(customAuthenticationProvider());
+        return manager;
+    }
 }
