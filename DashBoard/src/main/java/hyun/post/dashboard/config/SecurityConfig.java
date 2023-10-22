@@ -1,5 +1,7 @@
 package hyun.post.dashboard.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import hyun.post.dashboard.security.encrypt.EncryptionProvider;
 import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
 import hyun.post.dashboard.security.handler.CustomFailureHandler;
 import hyun.post.dashboard.security.handler.CustomSuccessHandler;
@@ -24,6 +26,8 @@ public class SecurityConfig {
     private final AuthenticationConfiguration config;
     private final CustomFailureHandler failureHandler;
     private final CustomSuccessHandler successHandler;
+    private final EncryptionProvider encryptionProvider;
+    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,7 +47,12 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationLoginFilter authenticationLoginFilter() throws Exception {
-        return new AuthenticationLoginFilter(authenticationManager(), successHandler, failureHandler);
+        return new AuthenticationLoginFilter(
+                authenticationManager(),
+                successHandler,
+                failureHandler,
+                objectMapper,
+                encryptionProvider);
     }
 
 

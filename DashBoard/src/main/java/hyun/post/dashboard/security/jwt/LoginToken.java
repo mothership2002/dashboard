@@ -1,22 +1,20 @@
 package hyun.post.dashboard.security.jwt;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
-@RedisHash("AccountTokenSet")
+@RedisHash(value = "LoginToken", timeToLive = 1L)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-public class AccountTokenSet {
-
+@ToString
+public class LoginToken {
     @Id
     private String account;
-
-    private String accessToken;
-    private String refreshToken;
-
+    public LoginToken(String account) {
+        this.account = account;
+    }
 }
