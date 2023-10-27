@@ -38,7 +38,7 @@ public class MemberDao {
 
     public AccessToken findOneByAccessToken(String accessToken) {
         return accessTokenRepository.findById(accessToken)
-                .orElseThrow(() -> new NotFoundAccessToken("Not Found accessToken"));
+                .orElseThrow(() -> new NotFoundAccessToken("Not Found AccessToken"));
     }
 
     public Boolean duplicateLoginCheck(String account, String accessToken) {

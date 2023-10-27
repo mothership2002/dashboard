@@ -19,4 +19,5 @@ public class LoginToken {
     public LoginToken(String account) {
         this.account = account;
     }
+
 }

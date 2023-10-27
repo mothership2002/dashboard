@@ -17,5 +17,4 @@ public class CustomMemberContext extends User {
         this.member = member;
     }
 
-
 }

@@ -3,16 +3,13 @@ package hyun.post.dashboard.listener;
 import hyun.post.dashboard.exception.CustomAssert;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -32,10 +29,10 @@ public class PropertyDestroyer {
 
     @EventListener(ApplicationReadyEvent.class)
     public void destroy() {
-        propertyClassList.forEach(property -> ac.removeBeanDefinition(getBeanName(property, ac)));
+        propertyClassList.forEach(property -> ac.removeBeanDefinition(getBeanName(property)));
     }
 
-    private String getBeanName(@NotNull Class<?> clazz, AnnotationConfigServletWebServerApplicationContext ac) {
+    private String getBeanName(@NotNull Class<?> clazz) {
         String name = parseClassName(clazz.getSimpleName());
         CustomAssert.isTrue(ac.containsBeanDefinition(name), "Not Include Bean");
         return name;

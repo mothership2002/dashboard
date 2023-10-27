@@ -17,7 +17,6 @@ public class CustomExceptionFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain filterChain)
             throws ServletException, IOException {
 
-
         filterChain.doFilter(req, resp);
     }
 }

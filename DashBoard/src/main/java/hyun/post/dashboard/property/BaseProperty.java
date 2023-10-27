@@ -10,12 +10,14 @@ public abstract class BaseProperty {
 
     @PreDestroy
     public void destroy() {
-        log.info("{} is destroyed.", PropertyDestroyer.parseClassName(this.getClass().getSimpleName()));
+        log.info("{} is destroyed.",
+                PropertyDestroyer.parseClassName(this.getClass().getSimpleName()));
     }
 
     @PostConstruct
     public void init() {
-        log.info("{} is constructed.", PropertyDestroyer.parseClassName(this.getClass().getSimpleName()));
         PropertyDestroyer.getPropertyClassList().add(this.getClass());
+        log.info("{} is constructed.",
+                PropertyDestroyer.parseClassName(this.getClass().getSimpleName()));
     }
 }
