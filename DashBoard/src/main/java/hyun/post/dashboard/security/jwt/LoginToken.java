@@ -12,6 +12,8 @@ import org.springframework.data.redis.core.RedisHash;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 public class LoginToken {
+
+
     @Id
     private String account;
     public LoginToken(String account) {

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
 @RedisHash("AccessToken")
 @Getter
@@ -14,6 +15,9 @@ import org.springframework.data.redis.core.RedisHash;
 public class AccessToken {
 
     @Id
-    private String account;
     private String accessToken;
+    private String account;
+
+    @TimeToLive
+    private Long ttl;
 }

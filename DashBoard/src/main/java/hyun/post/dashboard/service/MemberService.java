@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberService implements UserDetailsService {
 
     private final MemberDao memberDao;
+
     @Override
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
         Member member = memberDao.findByAccount(account);
