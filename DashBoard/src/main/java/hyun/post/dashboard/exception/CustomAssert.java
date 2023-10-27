@@ -1,5 +1,6 @@
 package hyun.post.dashboard.exception;
 
+import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -14,7 +15,7 @@ public class CustomAssert extends Assert {
         }
     }
 
-    public static void isTure(Boolean flag, String message, final Class<? extends RuntimeException> exceptionClass) {
+    public static void isTrue(@Nonnull Boolean flag, String message, final Class<? extends RuntimeException> exceptionClass) {
         if(!flag) {
             throwException(message, exceptionClass);
         }

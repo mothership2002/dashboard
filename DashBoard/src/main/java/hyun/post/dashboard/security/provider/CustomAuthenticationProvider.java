@@ -3,8 +3,6 @@ package hyun.post.dashboard.security.provider;
 import hyun.post.dashboard.exception.CustomAssert;
 import hyun.post.dashboard.exception.TryDuplicateLoginException;
 import hyun.post.dashboard.model.entity.Member;
-import hyun.post.dashboard.repository.redis.AccessTokenRepository;
-import hyun.post.dashboard.repository.redis.SyncLoginRepository;
 import hyun.post.dashboard.security.Member.CustomMemberContext;
 import hyun.post.dashboard.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,13 +13,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Objects;
 
-@Component
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -39,10 +35,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 (CustomMemberContext) memberService.loadUserByUsername(account);
         Member member = context.getMember();
 
-        CustomAssert.isTure(!passwordEncoder.matches(password, member.getPassword()),
+        CustomAssert.isTrue(!passwordEncoder.matches(password, member.getPassword()),
                 "Password Not Match", BadCredentialsException.class);
 
-        CustomAssert.isTure(memberService.duplicateLoginCheck(account, accessToken),
+        CustomAssert.isTrue(memberService.duplicateLoginCheck(account, accessToken),
                 "Duplication Login", TryDuplicateLoginException.class);
 
         return new UsernamePasswordAuthenticationToken(member, null);

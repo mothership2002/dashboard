@@ -30,7 +30,8 @@ public class MemberDao {
         Member member = memberRepository.findMemberByAccount(account)
                 .orElseThrow(() -> new UsernameNotFoundException("Not Found User"));
 
-        CustomAssert.isTure(hasLogin(account), "Duplicate Login", TryDuplicateLoginException.class);
+        CustomAssert.isTrue(hasLogin(account),
+                "Duplicate Login", TryDuplicateLoginException.class);
         loginTokenRepository.save(new LoginToken(account));
         return member;
     }
