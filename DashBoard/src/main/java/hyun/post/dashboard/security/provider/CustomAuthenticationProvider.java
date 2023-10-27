@@ -1,5 +1,6 @@
 package hyun.post.dashboard.security.provider;
 
+import hyun.post.dashboard.exception.CustomAssert;
 import hyun.post.dashboard.exception.TryDuplicateLoginException;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.repository.redis.AccessTokenRepository;
@@ -14,20 +15,18 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Objects;
 
+@Component
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final String AUTHORIZATION = "Authorization";
-
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
-    private final AccessTokenRepository accessTokenRepository;
-    private final SyncLoginRepository syncLoginRepository;
 
     @Override
     public Authentication authenticate(Authentication authentication)
@@ -36,20 +35,18 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         String accessToken = getAccessTokenByHeader();
 
-        CustomMemberContext context = (CustomMemberContext) memberService.loadUserByUsername(account);
+        CustomMemberContext context =
+                (CustomMemberContext) memberService.loadUserByUsername(account);
         Member member = context.getMember();
 
-        if (!passwordEncoder.matches(password, member.getPassword())) {
-            throw new BadCredentialsException("Password Not Match");
-        }
-        if (syncLoginRepository.findById(account).isPresent() ||
-                accessTokenRepository.findById(accessToken).isPresent()) {
-            throw new TryDuplicateLoginException("Duplication Login");
-        }
+        CustomAssert.isTure(!passwordEncoder.matches(password, member.getPassword()),
+                "Password Not Match", BadCredentialsException.class);
+
+        CustomAssert.isTure(memberService.duplicateLoginCheck(account, accessToken),
+                "Duplication Login", TryDuplicateLoginException.class);
 
         return new UsernamePasswordAuthenticationToken(member, null);
     }
-
 
 
     @Override
@@ -60,6 +57,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     private String getAccessTokenByHeader() {
         HttpServletRequest req;
         req = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        String AUTHORIZATION = "Authorization";
         return req.getHeader(AUTHORIZATION);
     }
+
+
 }

@@ -22,4 +22,8 @@ public class MemberService implements UserDetailsService {
         Member member = memberDao.findByAccount(account);
         return new CustomMemberContext(member, member.getAuthorities());
     }
+
+    public Boolean duplicateLoginCheck(String account, String accessToken) {
+        return memberDao.duplicateLoginCheck(account, accessToken);
+    }
 }
