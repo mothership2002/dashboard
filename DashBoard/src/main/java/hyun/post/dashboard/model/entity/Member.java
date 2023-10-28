@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "MEMBER")
@@ -49,10 +50,16 @@ public class Member extends BaseDateColumn implements UserDetails {
         this.email = email;
     }
 
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     // TODO 권환 관련 공부 필요
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        HashSet<Role> objects = new HashSet<>();
+        objects.add(role);
+        return objects;
     }
 
     @Override

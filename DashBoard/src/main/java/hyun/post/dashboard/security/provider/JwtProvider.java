@@ -43,7 +43,7 @@ public class JwtProvider {
     private String createToken(Member member, Long milliSecond) {
         return Jwts.builder()
                 .claim("memberId", member.getId())
-                .claim("role", member.getRole())
+//                .claim("role", member.getRole())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + milliSecond))
                 .signWith(secretKey)

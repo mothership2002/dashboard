@@ -23,6 +23,7 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
         if (authException.getCause() instanceof ExpiredJwtException) {
             System.out.println("hello");
         }
+        System.out.println(authException);
         headerComponent.addContentTypeResponse(response);
         objectMapper.writeValue(response.getWriter(),
                 new CommonResponse<>("entry point", authException.getMessage()));

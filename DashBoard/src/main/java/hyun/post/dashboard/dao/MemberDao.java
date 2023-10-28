@@ -1,12 +1,12 @@
 package hyun.post.dashboard.dao;
 
 import hyun.post.dashboard.exception.CustomAssert;
-import hyun.post.dashboard.exception.NotFoundAccessToken;
 import hyun.post.dashboard.exception.TryDuplicateLoginException;
 import hyun.post.dashboard.exception.WrongValue;
 import hyun.post.dashboard.model.dto.JsonWebToken;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.repository.rdbms.MemberRepository;
+import hyun.post.dashboard.repository.rdbms.RoleRepository;
 import hyun.post.dashboard.repository.redis.AccessTokenRepository;
 import hyun.post.dashboard.repository.redis.RefreshTokenRepository;
 import hyun.post.dashboard.repository.redis.SyncLoginRepository;
@@ -14,11 +14,8 @@ import hyun.post.dashboard.security.jwt.AccessToken;
 import hyun.post.dashboard.security.jwt.LoginToken;
 import hyun.post.dashboard.security.jwt.RefreshToken;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
-
-import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,16 +25,18 @@ public class MemberDao {
     private final SyncLoginRepository loginTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RoleRepository roleRepository;
 
-    public void save(Member member) {
-        memberRepository.save(member);
+    public Long save(Member member) {
+        member.setRole(roleRepository.findOneByRoleName("user").orElseThrow(() -> new RuntimeException("유저없음")));
+        return memberRepository.save(member).getId();
     }
 
     public Member findByAccount(String account) {
         Member member = memberRepository.findMemberByAccount(account)
                 .orElseThrow(() -> new UsernameNotFoundException("Not Found User"));
 
-        CustomAssert.isTrue(hasLogin(account),
+        CustomAssert.isTrue(!hasLogin(account),
                 "Duplicate Login", TryDuplicateLoginException.class);
         loginTokenRepository.save(new LoginToken(account));
         return member;
@@ -48,10 +47,8 @@ public class MemberDao {
         return accessTokenRepository.findById(accessToken).isPresent();
     }
 
-    public Boolean duplicateLoginCheck(String account, String accessToken) {
-        boolean hasLogin = hasLogin(account);
-        boolean hasAccessToken = hasAccessToken(accessToken);
-        return hasLogin || hasAccessToken;
+    public Boolean duplicateLoginCheck(String account) {
+        return hasLogin(account);
     }
 
     private Boolean hasLogin(String account) {

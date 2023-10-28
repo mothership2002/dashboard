@@ -29,18 +29,19 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             throws AuthenticationException {
         String account = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
-        String accessToken = getAccessTokenByHeader();
+
+        CustomAssert.isTrue(!memberService.duplicateLoginCheck(account),
+                "Duplication Login", TryDuplicateLoginException.class);
+        // 중복 로그인 관련. 로직 생각해야함.
 
         CustomMemberContext context =
                 (CustomMemberContext) memberService.loadUserByUsername(account);
         Member member = context.getMember();
 
-        CustomAssert.isTrue(!passwordEncoder.matches(password, member.getPassword()),
+        CustomAssert.isTrue(passwordEncoder.matches(password, member.getPassword()),
                 "Password Not Match", BadCredentialsException.class);
 
-        CustomAssert.isTrue(memberService.duplicateLoginCheck(account, accessToken),
-                "Duplication Login", TryDuplicateLoginException.class);
-
+        // 이 부분 잘못 만들어짐 (수정예정)
         return new UsernamePasswordAuthenticationToken(member, null);
     }
 

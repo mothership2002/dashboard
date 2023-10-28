@@ -12,6 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
 
@@ -28,6 +29,7 @@ public class AuthenticationLoginFilter extends UsernamePasswordAuthenticationFil
                                      EncryptionProvider encryptionProvider) {
         
         super(authenticationManager);
+        super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/login"));
         super.setAuthenticationSuccessHandler(successHandler);
         super.setAuthenticationFailureHandler(failureHandler);
         this.encryptionProvider = encryptionProvider;
@@ -43,7 +45,7 @@ public class AuthenticationLoginFilter extends UsernamePasswordAuthenticationFil
             throw new RuntimeException(e);
         }
         // 암호화 풀 이유가 없지 않나?
-        UsernamePasswordAuthenticationToken token
+         UsernamePasswordAuthenticationToken token
                 = new UsernamePasswordAuthenticationToken(member.getAccount(), member.getPassword());
         return getAuthenticationManager().authenticate(token);
     }

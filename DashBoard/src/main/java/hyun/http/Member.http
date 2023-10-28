@@ -1,0 +1,21 @@
+GET http://localhost:8080/hello/test?name=hello
+
+###################
+
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "account": "hello",
+  "password": "hello"
+}
+
+###################
+POST http://localhost:8080/members/add
+Content-Type: application/json
+
+{
+  "account": "hello",
+  "password": "hello",
+  "email" : "hello"
+}

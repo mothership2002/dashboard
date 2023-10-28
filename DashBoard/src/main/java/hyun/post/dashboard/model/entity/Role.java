@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 @Table(name = "ROLE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Role extends BaseColumn {
+public class Role extends BaseColumn implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +33,13 @@ public class Role extends BaseColumn {
     @OneToMany(mappedBy = "role")
     private List<Member> membersList = new ArrayList<>();
 
+    public Role(String roleName, Integer priority) {
+        this.roleName = roleName;
+        this.priority = priority;
+    }
 
+    @Override
+    public String getAuthority() {
+        return roleName;
+    }
 }

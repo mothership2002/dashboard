@@ -1,5 +1,6 @@
 package hyun.post.dashboard.config;
 
+import hyun.post.dashboard.repository.redis.AccessTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +12,10 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableRedisRepositories(basePackages = "hyun.post.dashboard.repository.redis")
 @Configuration
 @RequiredArgsConstructor
 @EnableTransactionManagement
+@EnableRedisRepositories(basePackageClasses = AccessTokenRepository.class)
 public class RedisConfig {
 
     private final RedisProperties redisProperties;

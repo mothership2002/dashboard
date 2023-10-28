@@ -1,6 +1,7 @@
 package hyun.post.dashboard.service;
 
 import hyun.post.dashboard.dao.MemberDao;
+import hyun.post.dashboard.model.dto.MemberDto;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.security.Member.CustomMemberContext;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,12 @@ public class MemberService implements UserDetailsService {
         return new CustomMemberContext(member, member.getAuthorities());
     }
 
-    public Boolean duplicateLoginCheck(String account, String accessToken) {
-        return memberDao.duplicateLoginCheck(account, accessToken);
+    public Boolean duplicateLoginCheck(String account) {
+        return memberDao.duplicateLoginCheck(account);
+    }
+
+    @Transactional
+    public Long createMember(Member member) {
+        return memberDao.save(member);
     }
 }

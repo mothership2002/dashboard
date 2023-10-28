@@ -2,6 +2,7 @@ package hyun.post.dashboard.model.common;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,4 +21,6 @@ public class CommonResponse<T> {
         this.responseDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.data = data;
     }
+
+
 }

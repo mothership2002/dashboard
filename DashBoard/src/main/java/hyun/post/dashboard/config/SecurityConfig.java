@@ -53,7 +53,7 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
-                                "/login",
+                                "/auth/login",
                                 "/members/add",
                                 "/home",
                                 "/swagger/**"
