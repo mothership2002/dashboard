@@ -30,7 +30,7 @@ public class PropertyDestroyer {
         return name.substring(0, 1).toLowerCase() + name.substring(1, name.indexOf("$"));
     }
 
-    @EventListener(ApplicationReadyEvent.class)
+//    @EventListener(ApplicationReadyEvent.class)
     public void destroy() {
         if (ac instanceof AnnotationConfigServletWebServerApplicationContext) {
             propertyClassList.forEach(property -> {

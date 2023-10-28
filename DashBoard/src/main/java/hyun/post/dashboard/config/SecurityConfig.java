@@ -52,7 +52,12 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/**", "/swagger/**").permitAll())
+                        auth.requestMatchers(
+                                "/login",
+                                "/members/add",
+                                "/home",
+                                "/swagger/**"
+                        ).permitAll())
                 .addFilterBefore(authenticationLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
         //TODO 각종 필터 달아야함
