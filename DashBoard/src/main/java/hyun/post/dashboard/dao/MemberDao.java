@@ -4,15 +4,21 @@ import hyun.post.dashboard.exception.CustomAssert;
 import hyun.post.dashboard.exception.NotFoundAccessToken;
 import hyun.post.dashboard.exception.TryDuplicateLoginException;
 import hyun.post.dashboard.exception.WrongValue;
+import hyun.post.dashboard.model.dto.JsonWebToken;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.repository.rdbms.MemberRepository;
 import hyun.post.dashboard.repository.redis.AccessTokenRepository;
+import hyun.post.dashboard.repository.redis.RefreshTokenRepository;
 import hyun.post.dashboard.repository.redis.SyncLoginRepository;
 import hyun.post.dashboard.security.jwt.AccessToken;
 import hyun.post.dashboard.security.jwt.LoginToken;
+import hyun.post.dashboard.security.jwt.RefreshToken;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
+
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,6 +27,7 @@ public class MemberDao {
     private final MemberRepository memberRepository;
     private final SyncLoginRepository loginTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public void save(Member member) {
         memberRepository.save(member);
@@ -36,9 +43,9 @@ public class MemberDao {
         return member;
     }
 
-    public AccessToken findOneByAccessToken(String accessToken) {
-        return accessTokenRepository.findById(accessToken)
-                .orElseThrow(() -> new NotFoundAccessToken("Not Found AccessToken"));
+    // 엑세스토큰이 없을 경우 에러 약속
+    public Boolean findOneByAccessToken(String accessToken) {
+        return accessTokenRepository.findById(accessToken).isPresent();
     }
 
     public Boolean duplicateLoginCheck(String account, String accessToken) {
@@ -56,5 +63,22 @@ public class MemberDao {
         CustomAssert.hasText(accessToken, "accessToken value is null", WrongValue.class);
         return accessTokenRepository.findById(accessToken).isPresent();
     }
+
+    public JsonWebToken saveToken(Member member, String accessTokenValue, String refreshTokenValue,
+                                  Long accessTokenTimeToLive, Long refreshTokenTimeToLive) {
+        AccessToken accessToken = new AccessToken(accessTokenValue, member.getAccount(), accessTokenTimeToLive);
+        RefreshToken refreshToken = new RefreshToken(refreshTokenValue, member.getAccount(), refreshTokenTimeToLive);
+
+        accessTokenRepository.save(accessToken);
+        refreshTokenRepository.save(refreshToken);
+
+        return new JsonWebToken(accessToken, refreshToken);
+    }
+
+    public void renewAccessToken(Member member, String beforeAccessToken, Long accessTokenTimeToLive, String renewAccessToken) {
+        accessTokenRepository.deleteById(beforeAccessToken);
+        accessTokenRepository.save(new AccessToken(renewAccessToken, member.getAccount(), accessTokenTimeToLive));
+    }
+
 
 }

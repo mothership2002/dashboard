@@ -3,8 +3,7 @@ package hyun.post.dashboard.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyun.post.dashboard.security.encrypt.EncryptionProvider;
 import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
-import hyun.post.dashboard.security.handler.CustomFailureHandler;
-import hyun.post.dashboard.security.handler.CustomSuccessHandler;
+import hyun.post.dashboard.security.handler.*;
 import hyun.post.dashboard.security.provider.CustomAuthenticationProvider;
 import hyun.post.dashboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,9 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -34,6 +35,7 @@ public class SecurityConfig {
     private final EncryptionProvider encryptionProvider;
     private final ObjectMapper objectMapper;
     private final MemberService memberService;
+    private final CommonRespHeaderComponent headerComponent;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,6 +44,11 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exceptionHandler ->
+                        exceptionHandler
+                                .accessDeniedHandler(customAccessDeniedHandler())
+                                .authenticationEntryPoint(customEntryPoint())
+                )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
@@ -79,7 +86,15 @@ public class SecurityConfig {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationEntryPoint customEntryPoint() {
+        return new CustomEntryPoint(objectMapper, headerComponent);
+    }
 
+    @Bean
+    public AccessDeniedHandler customAccessDeniedHandler() {
+        return new CustomAccessDeniedHandler(objectMapper, headerComponent);
+    }
 
 
 }

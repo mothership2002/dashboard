@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
 public class RedisTest {
 
     @Autowired
@@ -26,6 +25,12 @@ public class RedisTest {
     @Test
     void test() {
         assertThat(accessTokenRepository.findById("1").isPresent()).isTrue();
+    }
 
+    @Test
+    void test2() {
+        accessTokenRepository.save(new AccessToken("2","hello", 20L));
+        accessTokenRepository.deleteById("1");
+        assertThat(accessTokenRepository.findById("1").isPresent()).isFalse();
     }
 }

@@ -43,7 +43,8 @@ public class AuthenticationLoginFilter extends UsernamePasswordAuthenticationFil
             throw new RuntimeException(e);
         }
         // 암호화 풀 이유가 없지 않나?
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(member.getAccount(), member.getPassword());
+        UsernamePasswordAuthenticationToken token
+                = new UsernamePasswordAuthenticationToken(member.getAccount(), member.getPassword());
         return getAuthenticationManager().authenticate(token);
     }
 }
