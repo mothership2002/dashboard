@@ -3,7 +3,7 @@ package hyun.post.dashboard.security.provider;
 import hyun.post.dashboard.exception.CustomAssert;
 import hyun.post.dashboard.exception.TryDuplicateLoginException;
 import hyun.post.dashboard.model.entity.Member;
-import hyun.post.dashboard.security.Member.CustomMemberContext;
+import hyun.post.dashboard.security.member.CustomMemberContext;
 import hyun.post.dashboard.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

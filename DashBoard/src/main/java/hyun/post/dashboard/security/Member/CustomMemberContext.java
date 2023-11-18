@@ -1,4 +1,4 @@
-package hyun.post.dashboard.security.Member;
+package hyun.post.dashboard.security.member;
 
 import hyun.post.dashboard.model.entity.Member;
 import lombok.Getter;
