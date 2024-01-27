@@ -1,6 +1,7 @@
 package hyun.post.dashboard.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hyun.post.dashboard.dao.MemberDao;
 import hyun.post.dashboard.security.encrypt.EncryptionProvider;
 import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
 import hyun.post.dashboard.security.handler.*;
@@ -34,7 +35,7 @@ public class SecurityConfig {
     private final CustomSuccessHandler successHandler;
     private final EncryptionProvider encryptionProvider;
     private final ObjectMapper objectMapper;
-    private final MemberService memberService;
+    private final MemberDao memberDao;
     private final CommonRespHeaderComponent headerComponent;
 
     @Bean
@@ -83,7 +84,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(memberService, passwordEncoder());
+        return new CustomAuthenticationProvider(memberService(), passwordEncoder());
     }
 
     @Bean
@@ -101,5 +102,8 @@ public class SecurityConfig {
         return new CustomAccessDeniedHandler(objectMapper, headerComponent);
     }
 
-
+    @Bean
+    public MemberService memberService() {
+        return new MemberService(memberDao, passwordEncoder());
+    }
 }

@@ -15,7 +15,9 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
-@Table(name = "MEMBER")
+@Table(name = "MEMBER", indexes = {
+        @Index(name = "MEMBER_ROLE", columnList = "ROLE_ID")
+})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Where(clause = "DELETED_AT IS NULL")
@@ -40,7 +42,7 @@ public class Member extends BaseDateColumn implements UserDetails {
     private String email;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ROLE_ID")
+    @JoinColumn(name = "ROLE_ID", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Role role;
 
 
