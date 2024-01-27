@@ -1,5 +1,6 @@
 package hyun.post.dashboard.config;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import hyun.post.dashboard.repository.rdbms.MemberRepository;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,10 @@ public class JpaConfig {
     @Bean
     public PlatformTransactionManager transactionManager() {
         return new JpaTransactionManager(emf);
+    }
+
+    @Bean
+    public JPAQueryFactory jpaQueryFactory() {
+        return new JPAQueryFactory(emf.createEntityManager());
     }
 }
