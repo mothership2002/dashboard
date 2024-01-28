@@ -33,3 +33,7 @@ jwt:
   refresh-token-header: 'Refresh-Token' # 해더에 ? 바디에 ?
   access-token-expired:  1 #30 # min
   refresh-token-expired:  1 #30 # day
+
+logging:
+  level:
+    root: debug

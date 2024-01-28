@@ -2,7 +2,7 @@ GET http://localhost:8080/hello/test?name=hello
 
 ###################
 
-POST http://localhost:8080/auth/login
+POST http://localhost:8080/v1/auth/login
 Content-Type: application/json
 
 {
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###################
-POST http://localhost:8080/member/add
+POST http://localhost:8080/v1/member/add
 Content-Type: application/json
 
 {

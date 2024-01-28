@@ -1,0 +1,7 @@
+POST http://localhost:8080/v1/post
+Content-Type: application/json
+
+{
+  "title": "<script>hello</script>",
+  "content": "<div>world</div>"
+}

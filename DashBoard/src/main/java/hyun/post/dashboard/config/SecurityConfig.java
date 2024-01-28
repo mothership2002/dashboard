@@ -54,10 +54,11 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
-                                "/auth/login",
-                                "/members/add",
-                                "/home",
-                                "/swagger/**"
+//                                "/v1/auth/login",
+//                                "/v1/member/add",
+//                                "/home",
+//                                "/swagger/**"
+                                "/**"  //TODO Temporary
                         ).permitAll())
                 .addFilterBefore(authenticationLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();

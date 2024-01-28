@@ -1,5 +1,6 @@
 package hyun.post.dashboard.controller;
 
+import hyun.post.dashboard.aop.annotation.InboundContent;
 import hyun.post.dashboard.model.common.CommonResponse;
 import hyun.post.dashboard.model.dto.MemberDto;
 import hyun.post.dashboard.service.MemberService;
@@ -20,7 +21,10 @@ public class MemberController {
 
 
     @PostMapping("/add")
+    @InboundContent(MemberDto.class)
     public ResponseEntity<CommonResponse<Long>> createMember(@RequestBody MemberDto memberDto) {
-        return new ResponseEntity<>(new CommonResponse<>("success", memberService.createMember(memberDto)), HttpStatus.CREATED);
+        return new ResponseEntity<>(new CommonResponse<>(
+                "success", memberService.createMember(memberDto)),
+                HttpStatus.CREATED);
     }
 }
