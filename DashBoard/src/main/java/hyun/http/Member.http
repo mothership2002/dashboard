@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ###################
-POST http://localhost:8080/members/add
+POST http://localhost:8080/member/add
 Content-Type: application/json
 
 {
