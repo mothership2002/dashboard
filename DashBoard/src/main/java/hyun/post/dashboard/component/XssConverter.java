@@ -1,19 +1,17 @@
 package hyun.post.dashboard.component;
 
-import jakarta.annotation.PostConstruct;
+import hyun.post.dashboard.common.StaticString;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 @Component
 public class XssConverter {
 
-    private final String[] xssExceptionList = new String[]{"password"};
+    private final String[] xssExceptionArray = StaticString.XSS_EXCEPT_FILED_ARRAY;
 
     public boolean isExceptField(String value) {
-        return Arrays.asList(xssExceptionList).contains(value);
+        return Arrays.asList(xssExceptionArray).contains(value);
     }
 
     /**

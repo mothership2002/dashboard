@@ -15,7 +15,7 @@ POST http://localhost:8080/v1/member/add
 Content-Type: application/json
 
 {
-  "account": "hello",
-  "password": "hello",
-  "email" : "hello"
+  "account": "<script>hello1",
+  "password": "<hello>",
+  "email" : "hello123"
 }
