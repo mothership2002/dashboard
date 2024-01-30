@@ -1,9 +1,20 @@
 package hyun.post.dashboard.component;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class XssConverter {
+
+    private final String[] xssExceptionList = new String[]{"password"};
+
+    public boolean isExceptField(String value) {
+        return Arrays.asList(xssExceptionList).contains(value);
+    }
 
     /**
      * 생짜 string 들어올 때 저장 하기 위해

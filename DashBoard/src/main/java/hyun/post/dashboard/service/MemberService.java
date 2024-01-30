@@ -33,7 +33,6 @@ public class MemberService implements UserDetailsService {
         Member member = new Member(memberDto.getAccount(),
                 passwordEncoder.encode(memberDto.getPassword()),
                 memberDto.getEmail());
-
         return memberDao.save(member);
     }
 }

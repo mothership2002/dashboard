@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Aspect
@@ -52,6 +53,7 @@ public class ControllerAop {
         // 필드의 Type이 String.class 일 경우 xss 컨버트
         Arrays.stream(clazz.getDeclaredFields())
                 .filter(field -> field.getType() == String.class)
+                .filter(field -> !xssConverter.isExceptField(field.getName()))
                 .forEach(field -> convertStringField(field, dto));
     }
 

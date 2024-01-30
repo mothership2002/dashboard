@@ -22,6 +22,7 @@ public class RoleDao {
     private final RoleRepository roleRepository;
     private final MemberRepository memberRepository;
 
+    // TODO 더좋은 방법 찾아야함.
     @Transactional
     public void deleteById(Long roleId) {
         // role 객체를 찾음
