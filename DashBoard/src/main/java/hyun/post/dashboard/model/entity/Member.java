@@ -2,25 +2,31 @@ package hyun.post.dashboard.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashSet;
 
 @Entity
 @Table(name = "MEMBER", indexes = {
-        @Index(name = "MEMBER_ROLE", columnList = "ROLE_ID")
+        @Index(name = "MEMBER_ROLE", columnList = "ROLE_ID"),
+        @Index(name = "MEMBER_ACCOUNT", columnList = "ACCOUNT"),
+        @Index(name = "MEMBER_EMAIL", columnList = "EMAIL")
 })
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Where(clause = "DELETED_AT IS NULL")
+@Where(clause = "DELETED_AT IS NULL ")
+//@SQLDelete(sql = "UPDATE MEMBER " +
+//        "SET DELETED_AT = current_timestamp " +
+//        "WHERE MEMBER_ID = ? ")
 public class Member extends BaseDateColumn implements UserDetails {
 
     @Id
@@ -41,6 +47,7 @@ public class Member extends BaseDateColumn implements UserDetails {
     @Comment("이메일")
     private String email;
 
+    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ROLE_ID", nullable = false,
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
@@ -51,10 +58,6 @@ public class Member extends BaseDateColumn implements UserDetails {
         this.account = account;
         this.password = password;
         this.email = email;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     // TODO 권환 관련 공부 필요

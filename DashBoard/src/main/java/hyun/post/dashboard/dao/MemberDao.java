@@ -3,6 +3,7 @@ package hyun.post.dashboard.dao;
 import hyun.post.dashboard.exception.CustomAssert;
 import hyun.post.dashboard.exception.TryDuplicateLoginException;
 import hyun.post.dashboard.exception.WrongValue;
+import hyun.post.dashboard.exception.entity.NotFoundMemberException;
 import hyun.post.dashboard.model.dto.JsonWebToken;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.repository.rdbms.MemberRepository;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 @RequiredArgsConstructor
 public class MemberDao {
@@ -28,8 +31,17 @@ public class MemberDao {
     private final RoleRepository roleRepository;
 
     public Long save(Member member) {
-        member.setRole(roleRepository.findOneByRoleName("user").orElseThrow(() -> new RuntimeException("유저없음")));
         return memberRepository.save(member).getId();
+    }
+
+    public void softDeleteById(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundMemberException::new);
+        member.setDeletedAt(LocalDateTime.now());
+    }
+
+    public Integer hardDeleteByDate() {
+        LocalDateTime nowBeforeThreeMonth = LocalDateTime.now().minusMonths(3);
+        return memberRepository.deleteByDeletedAtLessThanEqual(nowBeforeThreeMonth);
     }
 
     public Member findByAccount(String account) {

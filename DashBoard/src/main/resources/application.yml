@@ -22,6 +22,8 @@ spring:
       lettuce:
         pool:
           enabled: true
+  banner:
+    location: classpath:banner.txt
 
 logging.level:
   org.hibernate.SQL: debug

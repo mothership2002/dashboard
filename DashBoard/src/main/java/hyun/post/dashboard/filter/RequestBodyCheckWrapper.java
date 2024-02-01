@@ -26,32 +26,4 @@ public class RequestBodyCheckWrapper extends HttpServletRequestWrapper {
         return new CustomServletInputStream(new ByteArrayInputStream(requestBody.getBytes(StandardCharsets.UTF_8)));
     }
 
-    private class CustomServletInputStream extends ServletInputStream {
-
-        private final ByteArrayInputStream inputStream;
-
-        public CustomServletInputStream(ByteArrayInputStream inputStream) {
-            this.inputStream = inputStream;
-        }
-
-        @Override
-        public boolean isFinished() {
-            return false;
-        }
-
-        @Override
-        public boolean isReady() {
-            return false;
-        }
-
-        @Override
-        public void setReadListener(ReadListener readListener) {
-
-        }
-
-        @Override
-        public int read() throws IOException {
-            return inputStream.read();
-        }
-    }
 }

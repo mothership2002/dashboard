@@ -2,6 +2,7 @@ package hyun.post.dashboard.component;
 
 import hyun.post.dashboard.common.StaticString;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Arrays;
 
@@ -20,15 +21,18 @@ public class XssConverter {
      * @return 이스케이프 처리 string
      */
     public String inbound(String content) {
-        return content
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll("\\(", "&#x28;")
-                .replaceAll("\\)", "&#x29;")
-                .replaceAll("\"", "&quot;")
-                .replaceAll("'", "&#x27;")
-                .replaceAll("/", "&#x2F;");
+        if (StringUtils.hasText(content)){
+            return content
+                    .replaceAll("&", "&amp;")
+                    .replaceAll("<", "&lt;")
+                    .replaceAll(">", "&gt;")
+                    .replaceAll("\\(", "&#x28;")
+                    .replaceAll("\\)", "&#x29;")
+                    .replaceAll("\"", "&quot;")
+                    .replaceAll("'", "&#x27;")
+                    .replaceAll("/", "&#x2F;");
+        }
+        return null;
     }
 
     // 필요한가?

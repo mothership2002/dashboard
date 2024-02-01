@@ -1,7 +1,6 @@
 package hyun.post.dashboard.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hyun.post.dashboard.dao.MemberDao;
 import hyun.post.dashboard.security.encrypt.EncryptionProvider;
 import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
 import hyun.post.dashboard.security.handler.*;
@@ -18,7 +17,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,8 +33,9 @@ public class SecurityConfig {
     private final CustomSuccessHandler successHandler;
     private final EncryptionProvider encryptionProvider;
     private final ObjectMapper objectMapper;
-    private final MemberDao memberDao;
+    private final MemberService memberService;
     private final CommonRespHeaderComponent headerComponent;
+    private final PasswordEncoder passwordEncoder;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -85,12 +84,7 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(memberService(), passwordEncoder());
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        return new CustomAuthenticationProvider(memberService, passwordEncoder);
     }
 
     @Bean
@@ -103,8 +97,4 @@ public class SecurityConfig {
         return new CustomAccessDeniedHandler(objectMapper, headerComponent);
     }
 
-    @Bean
-    public MemberService memberService() {
-        return new MemberService(memberDao, passwordEncoder());
-    }
 }

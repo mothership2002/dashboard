@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Comment;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -26,6 +27,7 @@ public abstract class BaseDateColumn {
     @Column(name = "MODIFIED_AT")
     private LocalDateTime modifiedAt;
 
+    @Setter
     @Comment("삭제일")
     @Column(name = "DELETED_AT")
     private LocalDateTime deletedAt;
