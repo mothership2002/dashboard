@@ -30,9 +30,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String account = (String) authentication.getPrincipal();
         String password = (String) authentication.getCredentials();
 
+        // 중복 로그인 관련. 로직 생각해야함.
         CustomAssert.isTrue(!memberService.duplicateLoginCheck(account),
                 "Duplication Login", TryDuplicateLoginException.class);
-        // 중복 로그인 관련. 로직 생각해야함.
 
         CustomMemberContext context =
                 (CustomMemberContext) memberService.loadUserByUsername(account);

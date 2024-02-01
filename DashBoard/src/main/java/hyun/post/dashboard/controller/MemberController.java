@@ -7,10 +7,7 @@ import hyun.post.dashboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +16,6 @@ public class MemberController {
 
     private final MemberService memberService;
 
-
     @PostMapping("/add")
     @InboundContent(MemberDto.class)
     public ResponseEntity<CommonResponse<Long>> createMember(@RequestBody MemberDto memberDto) {
@@ -27,4 +23,9 @@ public class MemberController {
                 "success", memberService.createMember(memberDto)),
                 HttpStatus.CREATED);
     }
+//
+//    @PutMapping
+//    public ResponseEntity<CommonResponse<Void>> updateMember() {
+//
+//    }
 }

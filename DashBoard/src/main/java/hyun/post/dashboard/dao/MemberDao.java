@@ -48,7 +48,7 @@ public class MemberDao {
         Member member = memberRepository.findMemberByAccount(account)
                 .orElseThrow(() -> new UsernameNotFoundException("Not Found User"));
 
-        CustomAssert.isTrue(!hasLogin(account),
+        CustomAssert.isTrue(!isLogin(account),
                 "Duplicate Login", TryDuplicateLoginException.class);
         loginTokenRepository.save(new LoginToken(account));
         return member;
@@ -60,17 +60,17 @@ public class MemberDao {
     }
 
     public Boolean duplicateLoginCheck(String account) {
-        return hasLogin(account);
+        return (isLogin(account) && hasAccessToken(account));
     }
 
-    private Boolean hasLogin(String account) {
+    private Boolean isLogin(String account) {
         CustomAssert.hasText(account, "account value is null", WrongValue.class);
         return loginTokenRepository.findById(account).isPresent();
     }
 
-    private Boolean hasAccessToken(String accessToken) {
-        CustomAssert.hasText(accessToken, "accessToken value is null", WrongValue.class);
-        return accessTokenRepository.findById(accessToken).isPresent();
+    private Boolean hasAccessToken(String account) {
+        CustomAssert.hasText(account, "accessToken value is null", WrongValue.class);
+        return accessTokenRepository.findById(account).isPresent();
     }
 
     public JsonWebToken saveToken(Member member, String accessTokenValue, String refreshTokenValue,
