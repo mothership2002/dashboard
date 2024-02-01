@@ -8,9 +8,7 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 public class AccessToken extends BaseTokenInfo {
 
-    @Id
     private String accessToken;
-
     public AccessToken(String accessToken, String account, Long ttl) {
         super(account, ttl);
         this.accessToken = accessToken;
