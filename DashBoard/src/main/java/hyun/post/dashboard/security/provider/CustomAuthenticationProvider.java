@@ -49,7 +49,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 "Already Have Session;" + loginSession.getSessionCode(),
                 AlreadyHaveSessionException.class));
 
-        // 이 부분 잘못 만들어짐 (수정예정)
         return new UsernamePasswordAuthenticationToken(member, null);
     }
 

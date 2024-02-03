@@ -1,6 +1,7 @@
 package hyun.post.dashboard.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hyun.post.dashboard.exception.auth.ExpiredAccessTokenException;
 import hyun.post.dashboard.model.common.CommonResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.ServletException;
@@ -20,10 +21,9 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        if (authException.getCause() instanceof ExpiredJwtException) {
+        if (authException instanceof ExpiredAccessTokenException) {
             System.out.println("hello");
         }
-        System.out.println(authException);
         headerComponent.addContentTypeResponse(response);
         objectMapper.writeValue(response.getWriter(),
                 new CommonResponse<>("entry point", authException.getMessage()));

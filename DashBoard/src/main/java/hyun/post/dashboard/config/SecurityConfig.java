@@ -6,6 +6,7 @@ import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
 import hyun.post.dashboard.security.filter.JwtAuthenticationFilter;
 import hyun.post.dashboard.security.handler.*;
 import hyun.post.dashboard.security.provider.CustomAuthenticationProvider;
+import hyun.post.dashboard.security.provider.JwtProvider;
 import hyun.post.dashboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +38,7 @@ public class SecurityConfig {
     private final MemberService memberService;
     private final CommonRespHeaderComponent headerComponent;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -95,7 +97,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter();
+        return new JwtAuthenticationFilter(jwtProvider);
     }
 
 }
