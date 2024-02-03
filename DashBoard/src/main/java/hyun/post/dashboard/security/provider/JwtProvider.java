@@ -1,7 +1,7 @@
 package hyun.post.dashboard.security.provider;
 
 import hyun.post.dashboard.dao.MemberDao;
-import hyun.post.dashboard.model.dto.JsonWebToken;
+import hyun.post.dashboard.security.jwt.JsonWebToken;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.property.JwtProperty;
 import io.jsonwebtoken.*;

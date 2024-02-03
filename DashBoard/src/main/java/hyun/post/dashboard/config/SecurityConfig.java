@@ -3,12 +3,14 @@ package hyun.post.dashboard.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyun.post.dashboard.security.encrypt.EncryptionProvider;
 import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
+import hyun.post.dashboard.security.filter.JwtAuthenticationFilter;
 import hyun.post.dashboard.security.handler.*;
 import hyun.post.dashboard.security.provider.CustomAuthenticationProvider;
 import hyun.post.dashboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -51,14 +53,11 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers(
-//                                "/auth/login",
-//                                "/login/**
-//                                "/v1/member/add",
-//                                "/swagger/**"
-                                "/**"  //TODO Temporary
-                        ).permitAll())
+                        auth.requestMatchers(HttpMethod.GET, "/v1/**", "/swagger/**").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/auth/**", "login/**", "/v1/member/add").permitAll()
+                )
                 .addFilterBefore(authenticationLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
         //TODO 각종 필터 달아야함
     }
@@ -92,6 +91,11 @@ public class SecurityConfig {
     @Bean
     public AccessDeniedHandler customAccessDeniedHandler() {
         return new CustomAccessDeniedHandler(objectMapper, headerComponent);
+    }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter();
     }
 
 }

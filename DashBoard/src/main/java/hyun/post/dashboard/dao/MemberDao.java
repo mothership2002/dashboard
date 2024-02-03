@@ -4,7 +4,7 @@ import hyun.post.dashboard.exception.CustomAssert;
 import hyun.post.dashboard.exception.auth.TryDuplicateLoginException;
 import hyun.post.dashboard.exception.WrongValue;
 import hyun.post.dashboard.exception.entity.NotFoundMemberException;
-import hyun.post.dashboard.model.dto.JsonWebToken;
+import hyun.post.dashboard.security.jwt.JsonWebToken;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.repository.rdbms.MemberRepository;
 import hyun.post.dashboard.repository.rdbms.RoleRepository;

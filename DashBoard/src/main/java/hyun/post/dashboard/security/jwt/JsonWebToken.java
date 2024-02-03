@@ -1,4 +1,4 @@
-package hyun.post.dashboard.model.dto;
+package hyun.post.dashboard.security.jwt;
 
 import hyun.post.dashboard.security.jwt.AccessToken;
 import hyun.post.dashboard.security.jwt.RefreshToken;

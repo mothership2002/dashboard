@@ -20,7 +20,7 @@ public class PostController {
     @PostMapping
     @InboundContent(PostDto.class)
     public ResponseEntity<Void> createPost(@RequestBody PostDto post) {
-
+        System.out.println(1);
         return null;
     }
 
