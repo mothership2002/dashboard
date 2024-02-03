@@ -6,11 +6,11 @@ import hyun.post.dashboard.exception.auth.NoMatchMemberInfoException;
 import hyun.post.dashboard.exception.auth.TryDuplicateLoginException;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.security.member.CustomMemberContext;
+import hyun.post.dashboard.security.member.LoginSession;
 import hyun.post.dashboard.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,6 +19,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -43,8 +44,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         CustomAssert.isTrue(passwordEncoder.matches(password, member.getPassword()),
                 "Password Not Match", NoMatchMemberInfoException.class);
 
-        CustomAssert.isTrue(!memberService.isHaveSession(account),
-                "Already Have Session", AlreadyHaveSessionException.class);
+        memberService.getSession(account)
+                .ifPresent(loginSession -> CustomAssert.isTrue(false,
+                "Already Have Session;" + loginSession.getSessionCode(),
+                AlreadyHaveSessionException.class));
+
         // 이 부분 잘못 만들어짐 (수정예정)
         return new UsernamePasswordAuthenticationToken(member, null);
     }

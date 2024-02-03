@@ -15,4 +15,9 @@ public class LoginSession {
     @Id
     private String account;
 
+    private String accessToken;
+    private String refreshToken;
+
+    private String sessionCode;
+
 }

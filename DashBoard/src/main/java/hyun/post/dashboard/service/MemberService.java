@@ -5,6 +5,7 @@ import hyun.post.dashboard.dao.RoleDao;
 import hyun.post.dashboard.model.dto.MemberDto;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.security.member.CustomMemberContext;
+import hyun.post.dashboard.security.member.LoginSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -32,8 +35,8 @@ public class MemberService implements UserDetailsService {
         return memberDao.duplicateLoginCheck(account);
     }
 
-    public Boolean isHaveSession(String account) {
-        return memberDao.isHaveSession(account);
+    public Optional<LoginSession> getSession(String account) {
+        return memberDao.getSession(account);
     }
 
     @Transactional
@@ -58,4 +61,18 @@ public class MemberService implements UserDetailsService {
         memberDao.softDeleteById(memberId); // 몽고로 이관할까 고민중
     }
 
+    public boolean sessionCheck(String account, String sessionCode) {
+        Optional<LoginSession> session = memberDao.getSession(account);
+        if (session.isEmpty()) {
+            return true;
+        }
+        if (session.get().getSessionCode().equals(sessionCode)) {
+            String accessToken = session.get().getAccessToken();
+            String refreshToken = session.get().getRefreshToken();
+            memberDao.removeAccessTokenAndRefreshToken(accessToken, refreshToken);
+            memberDao.removeSession(account);
+            return true;
+        }
+        return false;
+    }
 }

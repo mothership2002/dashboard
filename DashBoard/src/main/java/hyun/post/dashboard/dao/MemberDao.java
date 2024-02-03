@@ -21,6 +21,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -93,11 +95,20 @@ public class MemberDao {
     }
 
 
-    public Boolean isHaveSession(String account) {
-        return loginSessionRepository.findById(account).isPresent();
+    public Optional<LoginSession> getSession(String account) {
+        return loginSessionRepository.findById(account);
     }
 
-    public void saveSession(String account) {
-        loginSessionRepository.save(new LoginSession(account));
+    public void saveSession(String account, String accessToken, String refreshToken) {
+        loginSessionRepository.save(new LoginSession(account, accessToken, refreshToken, UUID.randomUUID().toString()));
+    }
+
+    public void removeSession(String account) {
+        loginSessionRepository.deleteById(account);
+    }
+
+    public void removeAccessTokenAndRefreshToken(String accessToken, String refreshToken) {
+        accessTokenRepository.deleteById(accessToken);
+        refreshTokenRepository.deleteById(refreshToken);
     }
 }

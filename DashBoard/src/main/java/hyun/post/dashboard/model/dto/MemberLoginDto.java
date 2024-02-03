@@ -9,4 +9,5 @@ public class MemberLoginDto {
 
     private String account;
     private String password;
+    private String sessionCode;
 }
