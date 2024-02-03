@@ -36,7 +36,7 @@ public class JwtProvider {
     public JsonWebToken saveToken(Member member) {
         String accessToken = createToken(member, accessTokenTimeToLive / 2L);
         String refreshToken = createToken(member, refreshTokenTimeToLive / 2L);
-        memberDao.saveSession(member.getAccount(), accessToken, refreshToken);
+        memberDao.saveSession(member.getAccount(), accessToken, refreshToken, refreshTokenTimeToLive / 2L);
         return memberDao.saveToken(member, accessToken, refreshToken , accessTokenTimeToLive, refreshTokenTimeToLive);
     }
 

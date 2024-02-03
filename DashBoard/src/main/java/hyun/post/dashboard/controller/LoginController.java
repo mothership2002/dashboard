@@ -26,7 +26,7 @@ public class LoginController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/refrech")
+    @PostMapping("/refresh")
     public ResponseEntity<?> refreshAccessToken() {
         return new ResponseEntity<>(HttpStatus.OK);
     }

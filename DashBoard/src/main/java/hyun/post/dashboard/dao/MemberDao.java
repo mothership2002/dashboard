@@ -99,15 +99,16 @@ public class MemberDao {
         return loginSessionRepository.findById(account);
     }
 
-    public void saveSession(String account, String accessToken, String refreshToken) {
-        loginSessionRepository.save(new LoginSession(account, accessToken, refreshToken, UUID.randomUUID().toString()));
+    public void saveSession(String account, String accessToken, String refreshToken, Long ttl) {
+        loginSessionRepository.save(new LoginSession(account, accessToken, refreshToken, UUID.randomUUID().toString(), ttl));
     }
 
-    public void removeSession(String account) {
+    public void deleteSession(String account) {
         loginSessionRepository.deleteById(account);
     }
 
-    public void removeAccessTokenAndRefreshToken(String accessToken, String refreshToken) {
+    // 원자적으로 자를까 고민.
+    public void deleteAccessTokenAndRefreshToken(String accessToken, String refreshToken) {
         accessTokenRepository.deleteById(accessToken);
         refreshTokenRepository.deleteById(refreshToken);
     }

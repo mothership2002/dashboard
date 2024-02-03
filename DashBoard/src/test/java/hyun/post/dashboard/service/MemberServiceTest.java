@@ -20,7 +20,7 @@ public class MemberServiceTest {
 
     @Test
     void test6() {
-        memberDao.saveSession("hello", "1","2");
+        memberDao.saveSession("hello", "1","2", 3000L);
         LoginSession hello = memberDao.getSession("hello").get();
 
         boolean failCode = memberService.sessionCheck("hello", "hello");

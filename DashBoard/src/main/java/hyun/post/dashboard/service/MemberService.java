@@ -69,8 +69,8 @@ public class MemberService implements UserDetailsService {
         if (session.get().getSessionCode().equals(sessionCode)) {
             String accessToken = session.get().getAccessToken();
             String refreshToken = session.get().getRefreshToken();
-            memberDao.removeAccessTokenAndRefreshToken(accessToken, refreshToken);
-            memberDao.removeSession(account);
+            memberDao.deleteAccessTokenAndRefreshToken(accessToken, refreshToken);
+            memberDao.deleteSession(account);
             return true;
         }
         return false;

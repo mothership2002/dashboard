@@ -52,9 +52,9 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(
-//                                "/v1/auth/login",
+//                                "/auth/login",
+//                                "/login/**
 //                                "/v1/member/add",
-//                                "/home",
 //                                "/swagger/**"
                                 "/**"  //TODO Temporary
                         ).permitAll())

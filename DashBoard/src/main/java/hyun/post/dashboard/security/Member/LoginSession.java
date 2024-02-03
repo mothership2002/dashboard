@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.redis.core.TimeToLive;
 
 @RedisHash("LoginSession")
 @Getter
@@ -19,5 +20,8 @@ public class LoginSession {
     private String refreshToken;
 
     private String sessionCode;
+
+    @TimeToLive
+    private Long ttl;
 
 }
