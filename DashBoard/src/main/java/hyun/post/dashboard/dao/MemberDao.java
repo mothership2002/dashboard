@@ -1,7 +1,7 @@
 package hyun.post.dashboard.dao;
 
 import hyun.post.dashboard.exception.CustomAssert;
-import hyun.post.dashboard.exception.TryDuplicateLoginException;
+import hyun.post.dashboard.exception.auth.TryDuplicateLoginException;
 import hyun.post.dashboard.exception.WrongValue;
 import hyun.post.dashboard.exception.entity.NotFoundMemberException;
 import hyun.post.dashboard.model.dto.JsonWebToken;
@@ -9,11 +9,13 @@ import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.repository.rdbms.MemberRepository;
 import hyun.post.dashboard.repository.rdbms.RoleRepository;
 import hyun.post.dashboard.repository.redis.AccessTokenRepository;
+import hyun.post.dashboard.repository.redis.LoginSessionRepository;
 import hyun.post.dashboard.repository.redis.RefreshTokenRepository;
 import hyun.post.dashboard.repository.redis.SyncLoginRepository;
 import hyun.post.dashboard.security.jwt.AccessToken;
 import hyun.post.dashboard.security.jwt.LoginToken;
 import hyun.post.dashboard.security.jwt.RefreshToken;
+import hyun.post.dashboard.security.member.LoginSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
@@ -28,6 +30,7 @@ public class MemberDao {
     private final SyncLoginRepository loginTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final LoginSessionRepository loginSessionRepository;
     private final RoleRepository roleRepository;
 
     public Long save(Member member) {
@@ -60,7 +63,7 @@ public class MemberDao {
     }
 
     public Boolean duplicateLoginCheck(String account) {
-        return (isLogin(account) && hasAccessToken(account));
+        return isLogin(account);
     }
 
     private Boolean isLogin(String account) {
@@ -68,9 +71,9 @@ public class MemberDao {
         return loginTokenRepository.findById(account).isPresent();
     }
 
-    private Boolean hasAccessToken(String account) {
-        CustomAssert.hasText(account, "accessToken value is null", WrongValue.class);
-        return accessTokenRepository.findById(account).isPresent();
+    private Boolean hasAccessToken(String accessToken) {
+        CustomAssert.hasText(accessToken, "accessToken value is null", WrongValue.class);
+        return accessTokenRepository.findById(accessToken).isPresent();
     }
 
     public JsonWebToken saveToken(Member member, String accessTokenValue, String refreshTokenValue,
@@ -90,4 +93,11 @@ public class MemberDao {
     }
 
 
+    public Boolean isHaveSession(String account) {
+        return loginSessionRepository.findById(account).isPresent();
+    }
+
+    public void saveSession(String account) {
+        loginSessionRepository.save(new LoginSession(account));
+    }
 }

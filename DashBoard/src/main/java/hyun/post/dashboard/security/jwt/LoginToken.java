@@ -16,6 +16,7 @@ public class LoginToken {
 
     @Id
     private String account;
+
     public LoginToken(String account) {
         this.account = account;
     }

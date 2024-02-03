@@ -1,7 +1,9 @@
 package hyun.post.dashboard.security.provider;
 
+import hyun.post.dashboard.exception.auth.AlreadyHaveSessionException;
 import hyun.post.dashboard.exception.CustomAssert;
-import hyun.post.dashboard.exception.TryDuplicateLoginException;
+import hyun.post.dashboard.exception.auth.NoMatchMemberInfoException;
+import hyun.post.dashboard.exception.auth.TryDuplicateLoginException;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.security.member.CustomMemberContext;
 import hyun.post.dashboard.service.MemberService;
@@ -39,8 +41,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         Member member = context.getMember();
 
         CustomAssert.isTrue(passwordEncoder.matches(password, member.getPassword()),
-                "Password Not Match", BadCredentialsException.class);
+                "Password Not Match", NoMatchMemberInfoException.class);
 
+        CustomAssert.isTrue(!memberService.isHaveSession(account),
+                "Already Have Session", AlreadyHaveSessionException.class);
         // 이 부분 잘못 만들어짐 (수정예정)
         return new UsernamePasswordAuthenticationToken(member, null);
     }

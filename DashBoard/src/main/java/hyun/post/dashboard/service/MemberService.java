@@ -32,6 +32,10 @@ public class MemberService implements UserDetailsService {
         return memberDao.duplicateLoginCheck(account);
     }
 
+    public Boolean isHaveSession(String account) {
+        return memberDao.isHaveSession(account);
+    }
+
     @Transactional
     public Long createMember(MemberDto memberDto) {
         Member member = new Member(memberDto.getAccount(),

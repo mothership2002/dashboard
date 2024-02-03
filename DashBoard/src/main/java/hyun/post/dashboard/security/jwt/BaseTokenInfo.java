@@ -7,7 +7,6 @@ import org.springframework.data.redis.core.TimeToLive;
 @Getter
 public abstract class BaseTokenInfo {
 
-    @Id
     private String account;
     @TimeToLive
     private Long ttl;
