@@ -31,6 +31,12 @@ public class MemberService implements UserDetailsService {
         return new CustomMemberContext(member, member.getAuthorities());
     }
 
+
+    public UserDetails loadUserByUsername(Long memberId, String account) throws UsernameNotFoundException {
+        Member member = memberDao.findByMemberIdAndAccount(memberId, account);
+        return new CustomMemberContext(member, member.getAuthorities());
+    }
+
     public Boolean duplicateLoginCheck(String account) {
         return memberDao.duplicateLoginCheck(account);
     }
@@ -75,4 +81,5 @@ public class MemberService implements UserDetailsService {
         }
         return false;
     }
+
 }

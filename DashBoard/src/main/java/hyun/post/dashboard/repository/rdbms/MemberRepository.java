@@ -20,4 +20,6 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     List<Member> findAllByRoleId(Long RoleId);
 
     Integer deleteByDeletedAtLessThanEqual(LocalDateTime nowBeforeThreeMonth);
+
+    Optional<Member> findByIdAndAccount(Long memberId, String account);
 }

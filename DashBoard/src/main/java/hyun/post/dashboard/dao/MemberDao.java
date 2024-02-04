@@ -112,4 +112,8 @@ public class MemberDao {
         accessTokenRepository.deleteById(accessToken);
         refreshTokenRepository.deleteById(refreshToken);
     }
+
+    public Member findByMemberIdAndAccount(Long memberId, String account) {
+        return memberRepository.findByIdAndAccount(memberId, account).orElseThrow(NotFoundMemberException::new);
+    }
 }

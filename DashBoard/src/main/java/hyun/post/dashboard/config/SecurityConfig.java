@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -57,9 +58,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(HttpMethod.GET, "/v1/**", "/swagger/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/auth/**", "login/**", "/v1/member/add").permitAll()
+                            .requestMatchers(HttpMethod.POST, "/v1/post", "/v1/reply").hasRole("USER")
                 )
-                .addFilterBefore(authenticationLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authenticationLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
         //TODO 각종 필터 달아야함
     }
@@ -77,7 +79,10 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
-        return config.getAuthenticationManager();
+        ProviderManager manager = (ProviderManager) config.getAuthenticationManager();
+        manager.getProviders().add(customAuthenticationProvider());
+        return manager;
+//        return config.getAuthenticationManager();
     }
 
     @Bean
@@ -96,8 +101,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(jwtProvider);
+    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+        return new JwtAuthenticationFilter(jwtProvider, memberService);
     }
+
 
 }

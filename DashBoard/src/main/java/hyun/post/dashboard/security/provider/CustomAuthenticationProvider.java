@@ -49,7 +49,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
                 "Already Have Session;" + loginSession.getSessionCode(),
                 AlreadyHaveSessionException.class));
 
-        return new UsernamePasswordAuthenticationToken(member, null);
+        return new UsernamePasswordAuthenticationToken(member, null, member.getAuthorities());
     }
 
 
