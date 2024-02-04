@@ -33,8 +33,8 @@ jwt:
   secret-key: 'anNvbi13ZWItdG9rZW4tc2FtcGxlLXByb2plY3Q=' # json-web-token-sample-project
   access-token-header: 'Authorization'
   refresh-token-header: 'Refresh-Token' # 해더에 ? 바디에 ?
-  access-token-expired:  1 #30 # min
-  refresh-token-expired:  1 #30 # day
+  access-token-expired: 30 # min
+  refresh-token-expired: 30 # day
 
 logging:
   level:

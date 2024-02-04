@@ -27,8 +27,8 @@ public class JwtProvider {
 
     public JwtProvider(MemberDao memberDao, JwtProperty jwtProperty) {
         this.memberDao = memberDao;
-        this.accessTokenTimeToLive = jwtProperty.getAccessTokenExpired() * 60L * 2;
-        this.refreshTokenTimeToLive = jwtProperty.getRefreshTokenExpired() * 24 * 60L * 2;
+        this.accessTokenTimeToLive = jwtProperty.getAccessTokenExpired() * 60L * 1000;
+        this.refreshTokenTimeToLive = jwtProperty.getRefreshTokenExpired() * 24 * 60L * 1000;
         this.accessTokenHeader = jwtProperty.getAccessTokenHeader();
         this.refreshTokenHeader = jwtProperty.getRefreshTokenHeader();
         this.secretKey = Keys.hmacShaKeyFor(jwtProperty.getSecretKey().getBytes(StandardCharsets.UTF_8));
@@ -36,9 +36,9 @@ public class JwtProvider {
     }
 
     public JsonWebToken saveToken(Member member) {
-        String accessToken = createToken(member, accessTokenTimeToLive / 2L);
-        String refreshToken = createToken(member, refreshTokenTimeToLive / 2L);
-        memberDao.saveSession(member.getAccount(), accessToken, refreshToken, refreshTokenTimeToLive / 2L);
+        String accessToken = createToken(member, accessTokenTimeToLive);
+        String refreshToken = createToken(member, refreshTokenTimeToLive);
+        memberDao.saveSession(member.getAccount(), accessToken, refreshToken, refreshTokenTimeToLive);
         return memberDao.saveToken(member, accessToken, refreshToken , accessTokenTimeToLive, refreshTokenTimeToLive);
     }
 
