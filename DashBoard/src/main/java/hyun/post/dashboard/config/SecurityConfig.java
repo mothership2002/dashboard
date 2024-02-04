@@ -3,6 +3,7 @@ package hyun.post.dashboard.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyun.post.dashboard.security.encrypt.EncryptionProvider;
 import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
+import hyun.post.dashboard.security.filter.CustomExceptionFilter;
 import hyun.post.dashboard.security.filter.JwtAuthenticationFilter;
 import hyun.post.dashboard.security.handler.*;
 import hyun.post.dashboard.security.provider.CustomAuthenticationProvider;
@@ -60,6 +61,7 @@ public class SecurityConfig {
                             .requestMatchers(HttpMethod.POST, "/auth/**", "login/**", "/v1/member/add").permitAll()
                             .requestMatchers(HttpMethod.POST, "/v1/post", "/v1/reply").hasRole("USER")
                 )
+                .addFilterBefore(customExceptionFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(authenticationLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
@@ -101,8 +103,13 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        return new JwtAuthenticationFilter(jwtProvider, memberService);
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtProvider);
+    }
+
+    @Bean
+    public CustomExceptionFilter customExceptionFilter() {
+        return new CustomExceptionFilter(objectMapper, headerComponent);
     }
 
 

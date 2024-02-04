@@ -1,6 +1,8 @@
 package hyun.post.dashboard.security.provider;
 
 import hyun.post.dashboard.dao.MemberDao;
+import hyun.post.dashboard.exception.CustomAssert;
+import hyun.post.dashboard.exception.auth.ExpiredAccessTokenException;
 import hyun.post.dashboard.security.jwt.JsonWebToken;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.property.JwtProperty;
@@ -73,6 +75,17 @@ public class JwtProvider {
 
     public Boolean accessTokenValidate(String token) {
         return memberDao.findOneByAccessToken(token);
+    }
+
+    public Member findMemberByToken(String accessToken) {
+        CustomAssert.isTrue(accessTokenValidate(accessToken),
+                "Expired Access Token",
+                        ExpiredAccessTokenException.class);
+
+        Claims claims = extractBody(accessToken);
+        Long memberId = claims.get("memberId", Long.class);
+        String account = claims.get("account", String.class);
+        return memberDao.findByMemberIdAndAccount(memberId, account);
     }
 
 }
