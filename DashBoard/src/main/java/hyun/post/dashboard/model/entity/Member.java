@@ -60,7 +60,7 @@ public class Member extends BaseDateColumn implements UserDetails {
         this.email = email;
     }
 
-    // TODO 권환 관련 공부 필요
+    // TODO 권한 관련 공부 필요
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         HashSet<Role> objects = new HashSet<>();

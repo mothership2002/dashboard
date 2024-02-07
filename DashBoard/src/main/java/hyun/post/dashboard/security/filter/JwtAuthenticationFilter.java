@@ -24,7 +24,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         String authenticationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (StringUtils.hasText(authenticationHeader)) {
             String accessToken = jwtProvider.extractToken(authenticationHeader);
@@ -36,28 +38,3 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 }
 
-
-//    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtProvider jwtProvider) {
-//        super(authenticationManager);
-////        super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/**"));
-//        this.jwtProvider = jwtProvider;
-//    }
-
-//    @Override
-//    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-//        String authenticationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-//        CustomAssert.hasText(authenticationHeader,
-//                "No Haven't Token",
-//                EmptyTokenException.class);
-//        String accessToken = jwtProvider.extractToken(authenticationHeader);
-//        CustomAssert.isTrue(jwtProvider.accessTokenValidate(accessToken),
-//                "Access Token Expired",
-//                ExpiredAccessTokenException.class);
-//        Claims claims = jwtProvider.extractBody(accessToken);
-//        Long memberId = claims.get("memberId", Long.class);
-//        String account = claims.get("account", String.class);
-//
-//        return getAuthenticationManager()
-//                .authenticate(new JwtAuthenticationToken(account, memberId));
-//    }
-//}

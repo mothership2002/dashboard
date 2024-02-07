@@ -11,9 +11,9 @@ import hyun.post.dashboard.repository.rdbms.RoleRepository;
 import hyun.post.dashboard.repository.redis.AccessTokenRepository;
 import hyun.post.dashboard.repository.redis.LoginSessionRepository;
 import hyun.post.dashboard.repository.redis.RefreshTokenRepository;
-import hyun.post.dashboard.repository.redis.SyncLoginRepository;
+import hyun.post.dashboard.repository.redis.LoginTransactionRepository;
 import hyun.post.dashboard.security.jwt.AccessToken;
-import hyun.post.dashboard.security.jwt.LoginToken;
+import hyun.post.dashboard.security.jwt.LoginTransaction;
 import hyun.post.dashboard.security.jwt.RefreshToken;
 import hyun.post.dashboard.security.member.LoginSession;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.util.UUID;
 public class MemberDao {
 
     private final MemberRepository memberRepository;
-    private final SyncLoginRepository loginTokenRepository;
+    private final LoginTransactionRepository loginTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final LoginSessionRepository loginSessionRepository;
@@ -55,7 +55,7 @@ public class MemberDao {
 
         CustomAssert.isTrue(!isLogin(account),
                 "Duplicate Login", TryDuplicateLoginException.class);
-        loginTokenRepository.save(new LoginToken(account));
+        loginTokenRepository.save(new LoginTransaction(account));
         return member;
     }
 

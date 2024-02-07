@@ -1,8 +1,8 @@
 package hyun.post.dashboard.jwt;
 
 import hyun.post.dashboard.repository.redis.AccessTokenRepository;
-import hyun.post.dashboard.repository.redis.SyncLoginRepository;
-import hyun.post.dashboard.security.jwt.LoginToken;
+import hyun.post.dashboard.repository.redis.LoginTransactionRepository;
+import hyun.post.dashboard.security.jwt.LoginTransaction;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,12 +19,12 @@ public class JwtTest {
     AccessTokenRepository tokenRepository;
 
     @Autowired
-    SyncLoginRepository loginTokenRepository;
+    LoginTransactionRepository loginTokenRepository;
 
 
     @Test
     void test() throws InterruptedException {
-        loginTokenRepository.save(new LoginToken("hello"));
+        loginTokenRepository.save(new LoginTransaction("hello"));
         Thread.sleep(1000l);
         Assertions.assertThat(loginTokenRepository.findById("hello").isPresent()).isFalse();
     }

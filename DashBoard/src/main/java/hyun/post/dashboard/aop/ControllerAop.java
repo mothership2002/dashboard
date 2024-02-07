@@ -47,8 +47,7 @@ public class ControllerAop {
 
         // 없을 경우 - 개발자가 잘못 지정했을 경우
         Object dto = castToObject.orElseThrow(NotMatchArgumentException::new);
-        // 인입 파람을 inboundFilter에서 찍을 예정
-        //log.info("[param] before \n{}", jsonParam(dto));
+
         // 필드의 Type이 String.class 일 경우 xss 컨버트
         Arrays.stream(clazz.getDeclaredFields())
                 .filter(field -> field.getType() == String.class

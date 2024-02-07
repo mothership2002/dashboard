@@ -59,7 +59,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(HttpMethod.GET, "/v1/**", "/swagger/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/auth/**", "login/**", "/v1/member/add").permitAll()
-                            .requestMatchers(HttpMethod.POST, "/v1/post", "/v1/reply").hasRole("USER")
+                            .anyRequest().authenticated()
+//                            .requestMatchers(HttpMethod.POST, "/v1/post", "/v1/reply")
                 )
                 .addFilterBefore(customExceptionFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

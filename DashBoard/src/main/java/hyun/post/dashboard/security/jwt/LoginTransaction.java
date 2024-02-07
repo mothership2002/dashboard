@@ -11,13 +11,13 @@ import org.springframework.data.redis.core.RedisHash;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
-public class LoginToken {
+public class LoginTransaction {
 
 
     @Id
     private String account;
 
-    public LoginToken(String account) {
+    public LoginTransaction(String account) {
         this.account = account;
     }
 

@@ -27,7 +27,7 @@ public class AuthenticationLoginFilter extends UsernamePasswordAuthenticationFil
                                      CustomFailureHandler failureHandler,
                                      ObjectMapper objectMapper,
                                      EncryptionProvider encryptionProvider) {
-        
+
         super(authenticationManager);
         super.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/login"));
         super.setAuthenticationSuccessHandler(successHandler);
@@ -45,7 +45,8 @@ public class AuthenticationLoginFilter extends UsernamePasswordAuthenticationFil
             throw new RuntimeException(e);
         }
         // 암호화 풀 이유가 없지 않나?
-         UsernamePasswordAuthenticationToken token
+        // TODO 이 부분 실수함
+        UsernamePasswordAuthenticationToken token
                 = new UsernamePasswordAuthenticationToken(member.getAccount(), member.getPassword());
         return getAuthenticationManager().authenticate(token);
     }

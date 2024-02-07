@@ -21,5 +21,5 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     Integer deleteByDeletedAtLessThanEqual(LocalDateTime nowBeforeThreeMonth);
 
-    Optional<Member> findByIdAndAccount(Long memberId, String account);
+
 }
