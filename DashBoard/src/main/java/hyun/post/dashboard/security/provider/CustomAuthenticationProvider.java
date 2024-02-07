@@ -30,8 +30,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
-        String account = (String) authentication.getPrincipal();
-        String password = (String) authentication.getCredentials();
+
+        String account = ((Member) authentication.getPrincipal()).getAccount();
+        String password = ((Member) authentication.getPrincipal()).getPassword();
 
         // 중복 로그인 관련. 로직 생각해야함.
         CustomAssert.isTrue(!memberService.duplicateLoginCheck(account),

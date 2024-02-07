@@ -2,6 +2,7 @@ package hyun.post.dashboard.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyun.post.dashboard.model.dto.MemberLoginDto;
+import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.security.encrypt.EncryptionProvider;
 import hyun.post.dashboard.security.handler.CustomFailureHandler;
 import hyun.post.dashboard.security.handler.CustomSuccessHandler;
@@ -47,7 +48,8 @@ public class AuthenticationLoginFilter extends UsernamePasswordAuthenticationFil
         // 암호화 풀 이유가 없지 않나?
         // TODO 이 부분 실수함
         UsernamePasswordAuthenticationToken token
-                = new UsernamePasswordAuthenticationToken(member.getAccount(), member.getPassword());
+                = new UsernamePasswordAuthenticationToken(new Member(member.getAccount(), member.getPassword(),null),
+                null);
         return getAuthenticationManager().authenticate(token);
     }
 }

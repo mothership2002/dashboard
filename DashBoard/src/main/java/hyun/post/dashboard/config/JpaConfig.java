@@ -11,6 +11,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -33,6 +34,17 @@ public class JpaConfig {
     @Bean
     public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(emf.createEntityManager());
+    }
+
+    @Bean
+    public AuditorAware<Long> auditorAware() {
+        return () -> {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication instanceof UsernamePasswordAuthenticationToken) {
+                return Optional.ofNullable(((Member) authentication.getPrincipal()).getId());
+            }
+            return Optional.empty();
+        };
     }
 
 }
