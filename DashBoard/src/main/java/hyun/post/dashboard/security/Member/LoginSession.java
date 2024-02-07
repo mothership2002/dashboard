@@ -24,4 +24,7 @@ public class LoginSession {
     @TimeToLive
     private Long ttl;
 
+    public void changeAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
 }

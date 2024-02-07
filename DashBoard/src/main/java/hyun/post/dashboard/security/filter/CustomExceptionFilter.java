@@ -2,6 +2,7 @@ package hyun.post.dashboard.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hyun.post.dashboard.exception.auth.ExpiredAccessTokenException;
+import hyun.post.dashboard.exception.auth.ExpiredRefreshTokenException;
 import hyun.post.dashboard.model.common.CommonResponse;
 import hyun.post.dashboard.security.handler.CommonRespHeaderComponent;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -27,15 +28,15 @@ public class CustomExceptionFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(req, resp);
         } catch (ExpiredJwtException e) {
-            exceptionResponse(req, resp, new ExpiredAccessTokenException("Expired Access Token"));
-        } catch (ExpiredAccessTokenException e) {
-            exceptionResponse(req, resp, e);
+            exceptionResponse(req, resp, "Expired Json Web Token");
+        } catch (ExpiredAccessTokenException | ExpiredRefreshTokenException e) {
+            exceptionResponse(req, resp, e.getMessage());
         }
     }
 
-    private void exceptionResponse(HttpServletRequest req, HttpServletResponse resp, Exception e) throws IOException {
+    private void exceptionResponse(HttpServletRequest req, HttpServletResponse resp, String message) throws IOException {
         headerComponent.addContentTypeResponse(resp);
         objectMapper.writeValue(resp.getWriter(),
-                new CommonResponse<>(e.getMessage(), req.getHeader(HttpHeaders.AUTHORIZATION)));
+                new CommonResponse<>(message, req.getHeader(HttpHeaders.AUTHORIZATION)));
     }
 }

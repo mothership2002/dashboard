@@ -3,6 +3,7 @@ package hyun.post.dashboard.service;
 import hyun.post.dashboard.dao.MemberDao;
 import hyun.post.dashboard.dao.RoleDao;
 import hyun.post.dashboard.exception.CustomAssert;
+import hyun.post.dashboard.exception.auth.ExpiredSessionException;
 import hyun.post.dashboard.exception.auth.NoMatchMemberInfoException;
 import hyun.post.dashboard.model.dto.JwtDto;
 import hyun.post.dashboard.model.dto.MemberDto;
@@ -38,6 +39,7 @@ public class MemberService implements UserDetailsService {
         return new CustomMemberContext(member, member.getAuthorities());
     }
 
+    @Transactional
     public JwtDto validateRefreshToken(String expiredAccessToken, String refreshToken) {
         Claims claims = jwtProvider.extractBody(refreshToken); // 여기서 토큰 만료 오류뜰꺼고
         RefreshToken token = memberDao.findOneByRefreshToken(refreshToken); // 안나오면 토큰 만료 오류 뜰꺼고
@@ -49,8 +51,12 @@ public class MemberService implements UserDetailsService {
         String account = token.getAccount();
         Long memberId = claims.get("memberId", Long.class);
         CustomAssert.isTrue(account.equals(claims.get("account", String.class)), "Not Valid Param", NoMatchMemberInfoException.class);
+        JwtDto jwtDto = jwtProvider.renewAccessToken(account, memberId);
 
-        return jwtProvider.renewAccessToken(account, memberId);
+        LoginSession loginSession = memberDao.getSession(account).orElseThrow(ExpiredSessionException::new); // 확률적으로 있나
+        loginSession.changeAccessToken(jwtDto.getAccessToken());
+        memberDao.saveSession(loginSession);
+        return jwtDto;
     }
 
     public Boolean duplicateLoginCheck(String account) {

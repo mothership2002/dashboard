@@ -23,6 +23,6 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         headerComponent.addContentTypeResponse(response);
         objectMapper.writeValue(response.getWriter(),
-                new CommonResponse<>("entry point", authException.getMessage()));
+                new CommonResponse<>("Fail Authentication", authException.getMessage()));
     }
 }

@@ -103,6 +103,10 @@ public class MemberDao {
         loginSessionRepository.save(new LoginSession(account, accessToken, refreshToken, UUID.randomUUID().toString(), ttl));
     }
 
+    public void saveSession(LoginSession session) {
+        loginSessionRepository.save(session);
+    }
+
     public void deleteSession(String account) {
         loginSessionRepository.deleteById(account);
     }
