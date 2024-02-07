@@ -3,6 +3,7 @@ package hyun.post.dashboard.security.provider;
 import hyun.post.dashboard.dao.MemberDao;
 import hyun.post.dashboard.exception.CustomAssert;
 import hyun.post.dashboard.exception.auth.ExpiredAccessTokenException;
+import hyun.post.dashboard.model.dto.JwtDto;
 import hyun.post.dashboard.security.jwt.JsonWebToken;
 import hyun.post.dashboard.model.entity.Member;
 import hyun.post.dashboard.property.JwtProperty;
@@ -36,16 +37,16 @@ public class JwtProvider {
     }
 
     public JsonWebToken saveToken(Member member) {
-        String accessToken = createToken(member, accessTokenTimeToLive);
-        String refreshToken = createToken(member, refreshTokenTimeToLive);
+        String accessToken = createToken(member.getAccount(), member.getId(), accessTokenTimeToLive);
+        String refreshToken = createToken(member.getAccount(), member.getId(), refreshTokenTimeToLive);
         memberDao.saveSession(member.getAccount(), accessToken, refreshToken, refreshTokenTimeToLive);
         return memberDao.saveToken(member, accessToken, refreshToken , accessTokenTimeToLive, refreshTokenTimeToLive);
     }
 
-    private String createToken(Member member, Long milliSecond) {
+    private String createToken(String account, Long memberId, Long milliSecond) {
         return Jwts.builder()
-                .claim("memberId", member.getId())
-                .claim("account", member.getAccount())
+                .claim("memberId", memberId)
+                .claim("account", account)
 //                .claim("role", member.getRole())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + milliSecond))
@@ -86,6 +87,12 @@ public class JwtProvider {
         Long memberId = claims.get("memberId", Long.class);
         String account = claims.get("account", String.class);
         return memberDao.findByMemberIdAndAccount(memberId, account);
+    }
+
+    public JwtDto renewAccessToken(String account, Long memberId) {
+        String renewedToken = createToken(account, memberId, accessTokenTimeToLive);
+        memberDao.renewAccessToken(account, accessTokenTimeToLive, renewedToken);
+        return new JwtDto(renewedToken, null);
     }
 
 }

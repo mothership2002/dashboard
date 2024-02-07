@@ -1,6 +1,9 @@
 package hyun.post.dashboard.controller;
 
+import hyun.post.dashboard.model.common.CommonResponse;
+import hyun.post.dashboard.model.dto.JwtDto;
 import hyun.post.dashboard.model.dto.MemberLoginDto;
+import hyun.post.dashboard.security.jwt.RefreshToken;
 import hyun.post.dashboard.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +30,9 @@ public class LoginController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken() {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> refreshAccessToken(@RequestBody JwtDto jwtDto) {
+        return new ResponseEntity<>(new CommonResponse<>("renew Access Token",
+                memberService.validateRefreshToken(jwtDto.getAccessToken(), jwtDto.getRefreshToken())),
+                HttpStatus.CREATED);
     }
 }

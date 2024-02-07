@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // 실험중인 컴포넌트
-@Component
+//@Component
 @Slf4j
 public class PropertyDestroyer {
 

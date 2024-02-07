@@ -1,6 +1,7 @@
 package hyun.post.dashboard.dao;
 
 import hyun.post.dashboard.exception.CustomAssert;
+import hyun.post.dashboard.exception.auth.ExpiredRefreshTokenException;
 import hyun.post.dashboard.exception.auth.TryDuplicateLoginException;
 import hyun.post.dashboard.exception.WrongValue;
 import hyun.post.dashboard.exception.entity.NotFoundMemberException;
@@ -89,9 +90,8 @@ public class MemberDao {
         return new JsonWebToken(accessToken, refreshToken);
     }
 
-    public void renewAccessToken(Member member, String beforeAccessToken, Long accessTokenTimeToLive, String renewAccessToken) {
-        accessTokenRepository.deleteById(beforeAccessToken);
-        accessTokenRepository.save(new AccessToken(renewAccessToken, member.getAccount(), accessTokenTimeToLive));
+    public void renewAccessToken(String account, Long accessTokenTimeToLive, String renewAccessToken) {
+        accessTokenRepository.save(new AccessToken(renewAccessToken, account, accessTokenTimeToLive));
     }
 
 
@@ -109,11 +109,19 @@ public class MemberDao {
 
     // 원자적으로 자를까 고민.
     public void deleteAccessTokenAndRefreshToken(String accessToken, String refreshToken) {
-        accessTokenRepository.deleteById(accessToken);
+        deleteAccessToken(accessToken);
         refreshTokenRepository.deleteById(refreshToken);
+    }
+
+    public void deleteAccessToken(String accessToken) {
+        accessTokenRepository.deleteById(accessToken);
     }
 
     public Member findByMemberIdAndAccount(Long memberId, String account) {
         return memberRepository.findByIdAndAccount(memberId, account).orElseThrow(NotFoundMemberException::new);
+    }
+
+    public RefreshToken findOneByRefreshToken(String refreshToken) {
+        return refreshTokenRepository.findById(refreshToken).orElseThrow(ExpiredRefreshTokenException::new);
     }
 }

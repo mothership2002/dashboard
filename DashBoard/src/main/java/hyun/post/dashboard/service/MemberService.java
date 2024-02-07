@@ -2,10 +2,16 @@ package hyun.post.dashboard.service;
 
 import hyun.post.dashboard.dao.MemberDao;
 import hyun.post.dashboard.dao.RoleDao;
+import hyun.post.dashboard.exception.CustomAssert;
+import hyun.post.dashboard.exception.auth.NoMatchMemberInfoException;
+import hyun.post.dashboard.model.dto.JwtDto;
 import hyun.post.dashboard.model.dto.MemberDto;
 import hyun.post.dashboard.model.entity.Member;
+import hyun.post.dashboard.security.jwt.RefreshToken;
 import hyun.post.dashboard.security.member.CustomMemberContext;
 import hyun.post.dashboard.security.member.LoginSession;
+import hyun.post.dashboard.security.provider.JwtProvider;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,6 +30,7 @@ public class MemberService implements UserDetailsService {
     private final MemberDao memberDao;
     private final RoleDao roleDao;
     private final PasswordEncoder passwordEncoder;
+    private final JwtProvider jwtProvider;
 
     @Override
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
@@ -31,10 +38,19 @@ public class MemberService implements UserDetailsService {
         return new CustomMemberContext(member, member.getAuthorities());
     }
 
+    public JwtDto validateRefreshToken(String expiredAccessToken, String refreshToken) {
+        Claims claims = jwtProvider.extractBody(refreshToken); // 여기서 토큰 만료 오류뜰꺼고
+        RefreshToken token = memberDao.findOneByRefreshToken(refreshToken); // 안나오면 토큰 만료 오류 뜰꺼고
 
-    public UserDetails loadUserByUsername(Long memberId, String account) throws UsernameNotFoundException {
-        Member member = memberDao.findByMemberIdAndAccount(memberId, account);
-        return new CustomMemberContext(member, member.getAuthorities());
+        if (jwtProvider.accessTokenValidate(expiredAccessToken)) {
+            memberDao.deleteAccessToken(expiredAccessToken);
+        }
+
+        String account = token.getAccount();
+        Long memberId = claims.get("memberId", Long.class);
+        CustomAssert.isTrue(account.equals(claims.get("account", String.class)), "Not Valid Param", NoMatchMemberInfoException.class);
+
+        return jwtProvider.renewAccessToken(account, memberId);
     }
 
     public Boolean duplicateLoginCheck(String account) {
