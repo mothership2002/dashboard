@@ -1,10 +1,10 @@
-<mxfile host="app.diagrams.net" modified="2024-02-07T05:14:05.852Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0" etag="t3j99_kSaj8woFmbB1wI" version="23.1.1" type="github">
+<mxfile host="app.diagrams.net" modified="2024-02-07T05:17:12.864Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0" etag="B3ML9duAHN46p3ukdxD-" version="23.1.1" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="1386" dy="793" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1631" dy="933" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
-        <mxCell id="8GiJINHcV0jm0DNlGFCi-0" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
+        <mxCell id="8GiJINHcV0jm0DNlGFCi-0" value="User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
           <mxGeometry x="40" y="164" width="40" height="60" as="geometry" />
         </mxCell>
         <mxCell id="8GiJINHcV0jm0DNlGFCi-1" value="로그인 시도" style="rounded=0;whiteSpace=wrap;html=1;" parent="WIyWlLk6GJQsqaUBKTNV-1" vertex="1">
@@ -163,16 +163,20 @@
             <mxPoint x="360" y="60" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="mw6NqvUpDxh2f4Y7yOHA-26" value="세션이 있다는 예외" style="rounded=0;whiteSpace=wrap;html=1;" parent="mw6NqvUpDxh2f4Y7yOHA-5" vertex="1">
-          <mxGeometry x="370" y="260" width="120" height="60" as="geometry" />
+        <mxCell id="mw6NqvUpDxh2f4Y7yOHA-26" value="세션이 있다는 예외" style="rounded=0;whiteSpace=wrap;html=1;direction=east;" parent="mw6NqvUpDxh2f4Y7yOHA-5" vertex="1">
+          <mxGeometry x="660" y="250" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="mw6NqvUpDxh2f4Y7yOHA-27" value="토큰 발급" style="rounded=0;whiteSpace=wrap;html=1;" parent="mw6NqvUpDxh2f4Y7yOHA-5" vertex="1">
           <mxGeometry x="660" y="30" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="mw6NqvUpDxh2f4Y7yOHA-28" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="mw6NqvUpDxh2f4Y7yOHA-5" source="mw6NqvUpDxh2f4Y7yOHA-20" target="mw6NqvUpDxh2f4Y7yOHA-26" edge="1">
+        <mxCell id="mw6NqvUpDxh2f4Y7yOHA-28" value="" style="endArrow=classic;html=1;rounded=0;edgeStyle=orthogonalEdgeStyle;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="mw6NqvUpDxh2f4Y7yOHA-5" source="mw6NqvUpDxh2f4Y7yOHA-20" target="mw6NqvUpDxh2f4Y7yOHA-26" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="320" y="320" as="sourcePoint" />
-            <mxPoint x="370" y="270" as="targetPoint" />
+            <mxPoint x="250" y="30" as="sourcePoint" />
+            <mxPoint x="300" y="80" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="430" y="210" />
+              <mxPoint x="720" y="210" />
+            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="mw6NqvUpDxh2f4Y7yOHA-29" value="YES" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="mw6NqvUpDxh2f4Y7yOHA-28" vertex="1" connectable="0">
@@ -227,8 +231,11 @@
             <mxPoint x="280" y="1290" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="B1ED9Or3kUa9bt0zVZo2-8" value="로그인 시도" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="B1ED9Or3kUa9bt0zVZo2-8" value="1. 로그인 플로우로" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="280" y="1260" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="B1ED9Or3kUa9bt0zVZo2-10" value="1. 로그인" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="30" y="30" width="60" height="30" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
