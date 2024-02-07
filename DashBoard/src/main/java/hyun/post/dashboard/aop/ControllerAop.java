@@ -10,7 +10,6 @@ import hyun.post.dashboard.exception.DtoConvertXssException;
 import hyun.post.dashboard.exception.NotJsonObjectException;
 import hyun.post.dashboard.exception.NotMatchArgumentException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -24,7 +23,6 @@ import java.util.Optional;
 
 @Aspect
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class ControllerAop {
 
@@ -53,8 +51,8 @@ public class ControllerAop {
         //log.info("[param] before \n{}", jsonParam(dto));
         // 필드의 Type이 String.class 일 경우 xss 컨버트
         Arrays.stream(clazz.getDeclaredFields())
-                .filter(field -> field.getType() == String.class)
-                .filter(field -> !xssConverter.isExceptField(field.getName()))
+                .filter(field -> field.getType() == String.class
+                        && !xssConverter.isExceptField(field.getName()))
                 .forEach(field -> convertStringField(field, dto));
         requestLog.inboundLog("[param] after \n{}", jsonParam(dto));
     }
