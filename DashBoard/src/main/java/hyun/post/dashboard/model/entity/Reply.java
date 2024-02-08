@@ -25,10 +25,19 @@ public class Reply extends BaseColumn {
     @Comment("내용")
     @Column(name = "REPLY_CONTENT", nullable = false)
     private String content;
+    
+    @Comment("블라인드 여부")
+    @Column(name = "BLIND_FLAG", nullable = false)
+    private Boolean isBlind;
 
     @Comment("게시글 PK")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "POST_ID", nullable = false,
             foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Post post;
+
+    public Reply(String content) {
+        this.content = content;
+        this.isBlind = false;
+    }
 }

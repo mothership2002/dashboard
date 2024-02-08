@@ -31,16 +31,22 @@ public class Post extends BaseColumn {
     @Comment("내용")
     private String content;
 
+    @Comment("블라인드 여부")
+    @Column(name = "BLIND_FLAG")
+    private Boolean isBlind;
+
     @OneToMany(mappedBy = "post")
     private List<Reply> reply = new ArrayList<>();
 
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
+        this.isBlind = false;
     }
 
     public void update(Post post) {
         this.title = post.title;
         this.content = post.content;
+        this.isBlind = post.isBlind;
     }
 }
