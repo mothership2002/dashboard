@@ -1,6 +1,8 @@
 package hyun.post.dashboard.dao;
 
 import hyun.post.dashboard.model.entity.Post;
+import hyun.post.dashboard.model.entity.PostCategory;
+import hyun.post.dashboard.repository.rdbms.PostCategoryRepository;
 import hyun.post.dashboard.repository.rdbms.PostRepository;
 import hyun.post.dashboard.repository.rdbms.ReplyRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ public class PostDao {
 
     private final PostRepository postRepository;
     private final ReplyRepository replyRepository;
+    private final PostCategoryRepository postCategoryRepository;
 
     /**
      * 수정 및 저장 용
@@ -39,5 +42,12 @@ public class PostDao {
         postRepository.deleteById(postId);
     }
 
+    public List<PostCategory> findAllCategory() {
+        return postCategoryRepository.findAll();
+    }
 
+    public PostCategory findCategoryByCategoryName(String categoryName) {
+        // TODO 예외 만들어야함.
+        return postCategoryRepository.findOneByName(categoryName).orElseThrow(RuntimeException::new);
+    }
 }

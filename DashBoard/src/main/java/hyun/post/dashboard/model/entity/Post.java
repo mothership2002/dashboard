@@ -12,7 +12,8 @@ import java.util.List;
 @Entity(name = "POST")
 @Table(name = "POST", indexes = {
         @Index(name = "POST_MEMBER_CREATED", columnList = "CREATED_BY"),
-        @Index(name = "POST_MEMBER_UPDATED", columnList = "MODIFIED_BY")})
+        @Index(name = "POST_MEMBER_UPDATED", columnList = "MODIFIED_BY"),
+        @Index(name = "POST_CATEGORY", columnList = "CATEGORY_ID")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Post extends BaseColumn {
@@ -35,12 +36,18 @@ public class Post extends BaseColumn {
     @Column(name = "BLIND_FLAG")
     private Boolean isBlind;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "POST_CATEGORY_ID",
+            nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private PostCategory postCategory;
+
     @OneToMany(mappedBy = "post")
     private List<Reply> reply = new ArrayList<>();
 
-    public Post(String title, String content) {
+    public Post(String title, String content, PostCategory postCategory) {
         this.title = title;
         this.content = content;
+        this.postCategory = postCategory;
         this.isBlind = false;
     }
 
