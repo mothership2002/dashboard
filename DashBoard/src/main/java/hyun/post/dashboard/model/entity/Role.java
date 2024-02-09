@@ -1,5 +1,6 @@
 package hyun.post.dashboard.model.entity;
 
+import hyun.post.dashboard.model.relation.RoleAndResource;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -32,6 +33,9 @@ public class Role extends BaseColumn implements GrantedAuthority {
 
     @OneToMany(mappedBy = "role")
     private List<Member> membersList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "role")
+    private List<RoleAndResource> accessibleResources = new ArrayList<>();
 
     public Role(String roleName, Integer priority) {
         this.roleName = roleName;
