@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
@@ -57,6 +58,7 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
+//                        auth.anyRequest().access(new CustomAuthorizationManager());
                         auth.requestMatchers(HttpMethod.GET, "/v1/**", "/swagger/**").permitAll()
                             .requestMatchers(HttpMethod.POST, "/auth/**", "login/**", "/v1/member/add").permitAll()
                             .anyRequest().authenticated()
@@ -109,6 +111,5 @@ public class SecurityConfig {
     public CustomExceptionFilter customExceptionFilter() {
         return new CustomExceptionFilter(objectMapper, headerComponent);
     }
-
 
 }
