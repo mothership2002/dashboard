@@ -41,13 +41,4 @@ public class RoleDao {
     }
 
 
-    // Default Role values;
-    @EventListener(ApplicationReadyEvent.class)
-    public void init() {
-        List<Role> list = new ArrayList<>();
-        list.add(new Role("admin", 0));
-        list.add(new Role("manager", 1));
-        list.add(new Role("user", 10));
-        roleRepository.saveAll(list);
-    }
 }
