@@ -1,9 +1,11 @@
 package hyun.post.dashboard.listener;
 
 import hyun.post.dashboard.model.common.HttpMethod;
+import hyun.post.dashboard.model.entity.PostCategory;
 import hyun.post.dashboard.model.entity.Resource;
 import hyun.post.dashboard.model.entity.Role;
 import hyun.post.dashboard.model.relation.RoleAndResource;
+import hyun.post.dashboard.repository.rdbms.PostCategoryRepository;
 import hyun.post.dashboard.repository.rdbms.ResourceRepository;
 import hyun.post.dashboard.repository.rdbms.RoleAndResourceRepository;
 import hyun.post.dashboard.repository.rdbms.RoleRepository;
@@ -37,6 +39,7 @@ public class ApplicationInitializer {
     private final RefreshTokenRepository refreshTokenRepository;
     private final LoginSessionRepository loginSessionRepository;
     private final LoginTransactionRepository loginTransactionRepository;
+    private final PostCategoryRepository postCategoryRepository;
 
     // Default Role values;
     @EventListener(ApplicationReadyEvent.class)
@@ -45,13 +48,14 @@ public class ApplicationInitializer {
         List<Role> roles = initDefaultRole();
         List<Resource> resources = initDefaultResource();
         initAdmin();
+        initCategory();
         initDefaultAuthorization(roles, resources);
         initializedRedis();
         log.info("Application init End");
     }
 
     private void initAdmin() {
-        Role admin = new Role("admin", 0);
+        Role admin = new Role("ADMIN");
         Resource resource = new Resource("/**", HttpMethod.ALL);
         RoleAndResource roleAndResource = new RoleAndResource(admin, resource);
         roleRepository.save(admin);
@@ -61,18 +65,30 @@ public class ApplicationInitializer {
 
     private List<Role> initDefaultRole() {
         List<Role> list = new ArrayList<>();
-        list.add(new Role("manager", 1));
-        list.add(new Role("user", 10));
+        list.add(new Role("MANAGER"));
+        list.add(new Role("USER"));
+        list.add(new Role("ANONYMOUS"));
         roleRepository.saveAll(list);
         return list;
     }
 
+    //                        auth.requestMatchers(HttpMethod.GET, "/v1/**", "/swagger/**").permitAll()
+//                            .requestMatchers(HttpMethod.POST, "/auth/**", "login/**", "/v1/member/add").permitAll()
+//                            .anyRequest().authenticated()
+//                            .requestMatchers(HttpMethod.POST, "/v1/post", "/v1/reply")
     private List<Resource> initDefaultResource() {
         List<Resource> list = new ArrayList<>();
         list.add(new Resource("/v1/**", HttpMethod.GET));         // default
         list.add(new Resource("/swagger/**", HttpMethod.GET));    // dev
+        list.add(new Resource("/auth/**", HttpMethod.POST));
+        list.add(new Resource("/login/**", HttpMethod.POST));
+        list.add(new Resource("/v1/member/add", HttpMethod.POST));
         resourceRepository.saveAll(list);
         return list;
+    }
+
+    private void initCategory() {
+        postCategoryRepository.save(new PostCategory("test"));
     }
 
     private void initDefaultAuthorization(List<Role> roles, List<Resource> resources) {

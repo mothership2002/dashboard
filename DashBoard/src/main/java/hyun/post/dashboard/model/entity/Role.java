@@ -27,9 +27,9 @@ public class Role extends BaseColumn implements GrantedAuthority {
     @Comment("접근 권한 이름")
     private String roleName;
 
-    @Column(name = "PRIORITY")
-    @Comment("우선 순위")
-    private Integer priority;
+//    @Column(name = "PRIORITY")
+//    @Comment("우선 순위")
+//    private Integer priority;
 
     @OneToMany(mappedBy = "role")
     private List<Member> membersList = new ArrayList<>();
@@ -37,9 +37,12 @@ public class Role extends BaseColumn implements GrantedAuthority {
     @OneToMany(mappedBy = "role")
     private List<RoleAndResource> accessibleResources = new ArrayList<>();
 
-    public Role(String roleName, Integer priority) {
+//    public Role(String roleName, Integer priority) {
+//        this.roleName = roleName;
+//        this.priority = priority;
+//    }
+    public Role(String roleName) {
         this.roleName = roleName;
-        this.priority = priority;
     }
 
     @Override

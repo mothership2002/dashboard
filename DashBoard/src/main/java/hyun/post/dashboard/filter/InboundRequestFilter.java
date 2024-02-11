@@ -22,6 +22,7 @@ public class InboundRequestFilter implements Filter {
         log.info("Request Body Filter Initialized");
     }
 
+    // 로깅 포인트를 숨키니까 추적이 힘드네
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
@@ -30,7 +31,10 @@ public class InboundRequestFilter implements Filter {
 
         StringBuffer url = req.getRequestURL();
         String body = reqWrapper.getRequestBody();
-        requestLog.inboundLog("[Request URL] : {}\n[Request Body]\n{}", url, body);
+
+        if (!req.getMethod().equals("GET")) {
+            requestLog.inboundLog("[Request URL] : {}\n[Request Body]\n{}", url, body);
+        }
 
         chain.doFilter(reqWrapper, response);
     }

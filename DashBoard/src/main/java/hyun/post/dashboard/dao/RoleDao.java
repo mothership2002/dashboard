@@ -23,22 +23,25 @@ public class RoleDao {
     private final RoleRepository roleRepository;
     private final MemberRepository memberRepository;
 
-    // TODO 더좋은 방법 찾아야함.
-    @Transactional
-    public void deleteById(Long roleId) {
-        Role role = roleRepository.findById(roleId).orElseThrow(NotFoundRoleException::new);
-        List<Role> roleList = roleRepository.findByIdAndPriorityLessThan(roleId, role.getPriority());
-        Optional<Role> changeRole = Optional.ofNullable(roleList.get(0));
-        List<Member> members = memberRepository.findAllByRoleId(roleId);
-        members.forEach(member -> member.setRole(changeRole.orElseThrow(NotFoundRoleException::new)));
-        roleRepository.deleteById(roleId);
-        memberRepository.saveAll(members);
-    }
+    // 권한 자체는 삭제 할 이유가 없음.
+//    @Transactional
+//    public void deleteById(Long roleId) {
+//        Role role = roleRepository.findById(roleId).orElseThrow(NotFoundRoleException::new);
+//        List<Role> roleList = roleRepository.findByIdAndPriorityLessThan(roleId, role.getPriority());
+//        Optional<Role> changeRole = Optional.ofNullable(roleList.get(0));
+//        List<Member> members = memberRepository.findAllByRoleId(roleId);
+//        members.forEach(member -> member.setRole(changeRole.orElseThrow(NotFoundRoleException::new)));
+//        roleRepository.deleteById(roleId);
+//        memberRepository.saveAll(members);
+//    }
 
     @Transactional(readOnly = true)
     public Role findOneByRoleName(String roleName) {
         return roleRepository.findOneByRoleName(roleName).orElseThrow(NotFoundRoleException::new);
     }
 
+    public List<Role> findAll() {
+        return roleRepository.findAll();
+    }
 
 }

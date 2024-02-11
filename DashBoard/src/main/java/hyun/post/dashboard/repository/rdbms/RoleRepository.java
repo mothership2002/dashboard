@@ -10,5 +10,4 @@ public interface RoleRepository extends JpaRepository<Role, Long>, RoleRepositor
 
     Optional<Role> findOneByRoleName(String roleName);
 
-    List<Role> findByIdAndPriorityLessThan(Long roleId, Integer priority);
 }

@@ -8,12 +8,15 @@ import hyun.post.dashboard.exception.auth.NoMatchMemberInfoException;
 import hyun.post.dashboard.model.dto.JwtDto;
 import hyun.post.dashboard.model.dto.MemberDto;
 import hyun.post.dashboard.model.entity.Member;
+import hyun.post.dashboard.model.entity.Role;
 import hyun.post.dashboard.security.jwt.RefreshToken;
 import hyun.post.dashboard.security.member.CustomMemberContext;
 import hyun.post.dashboard.security.member.LoginSession;
 import hyun.post.dashboard.security.provider.JwtProvider;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +24,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -32,6 +39,7 @@ public class MemberService implements UserDetailsService {
     private final RoleDao roleDao;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final Map<String, Role> roleMap = new HashMap<>();
 
     @Override
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
@@ -72,7 +80,7 @@ public class MemberService implements UserDetailsService {
         Member member = new Member(memberDto.getAccount(),
                 passwordEncoder.encode(memberDto.getPassword()),
                 memberDto.getEmail());
-        member.setRole(roleDao.findOneByRoleName("user"));
+        member.setRole(roleMap.get("USER"));
         return memberDao.save(member);
     }
 
@@ -102,6 +110,11 @@ public class MemberService implements UserDetailsService {
             return true;
         }
         return false;
+    }
+
+    @EventListener(ApplicationReadyEvent.class)
+    public void defaultRole() {
+        roleDao.findAll().forEach(role -> roleMap.put(role.getRoleName(), role));
     }
 
 }

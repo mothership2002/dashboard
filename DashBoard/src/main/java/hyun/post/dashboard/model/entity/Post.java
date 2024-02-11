@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "POST", indexes = {
         @Index(name = "POST_MEMBER_CREATED", columnList = "CREATED_BY"),
         @Index(name = "POST_MEMBER_UPDATED", columnList = "MODIFIED_BY"),
-        @Index(name = "POST_CATEGORY", columnList = "CATEGORY_ID")})
+        @Index(name = "POST_CATEGORY", columnList = "POST_CATEGORY_ID")})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Post extends BaseColumn {
