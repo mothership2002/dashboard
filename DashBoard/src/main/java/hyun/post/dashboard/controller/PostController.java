@@ -29,4 +29,12 @@ public class PostController {
                 HttpStatus.CREATED);
     }
 
+    @GetMapping("/{categoryName}/{postId}")
+    public ResponseEntity<?> getPost(@PathVariable String categoryName,
+                                     @PathVariable Long postId) {
+        PostDto post = postService.findByIdAndCategoryName(postId, categoryName);
+        return new ResponseEntity<>(new CommonResponse<>("success", post)
+                , HttpStatus.OK);
+    }
+
 }
