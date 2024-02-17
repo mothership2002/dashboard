@@ -61,6 +61,10 @@ dependencies {
     // common io
     implementation 'commons-io:commons-io:2.11.0'
 
+    // postgres
+//    implementation group: 'org.postgresql', name: 'postgresql', version: '42.7.1'
+    runtimeOnly 'org.postgresql:postgresql'
+
 
     // test lombok
     testCompileOnly 'org.projectlombok:lombok'
