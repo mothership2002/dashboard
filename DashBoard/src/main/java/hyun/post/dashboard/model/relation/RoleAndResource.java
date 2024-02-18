@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "ROLE_AND_RESOURCE",
         indexes = {
-                @Index(name = "ROLE", columnList = "ROLE_ID"),
-                @Index(name = "RESOURCE", columnList = "RESOURCE_ID")})
+                @Index(name = "ROLE_FK", columnList = "ROLE_ID"),
+                @Index(name = "RESOURCE_FK", columnList = "RESOURCE_ID")})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoleAndResource {

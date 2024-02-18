@@ -2,11 +2,15 @@ version: 0.0.1
 
 
 spring:
+#  datasource:
+#    url: jdbc:h2:tcp://localhost/~/test
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://mothership2002.iptime.org:5432/DASHBOARD
+
   jpa:
     hibernate:
       ddl-auto: create
@@ -17,7 +21,8 @@ spring:
     open-in-view: false
   data:
     redis:
-      host: localhost
+#      host: localhost
+      host: 'mothership2002.iptime.org'
       port: 6379
       lettuce:
         pool:

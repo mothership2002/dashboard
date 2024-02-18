@@ -40,7 +40,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
     // rdbms
-    runtimeOnly 'com.h2database:h2'
+//    runtimeOnly 'com.h2database:h2'
 
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -60,6 +60,9 @@ dependencies {
 
     // common io
     implementation 'commons-io:commons-io:2.11.0'
+
+    // postgres
+    runtimeOnly 'org.postgresql:postgresql'
 
 
     // test lombok

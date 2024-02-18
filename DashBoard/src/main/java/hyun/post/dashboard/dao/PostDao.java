@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,8 +47,12 @@ public class PostDao {
         return postCategoryRepository.findAll();
     }
 
-    public PostCategory findCategoryByCategoryName(String categoryName) {
-        // TODO 예외 만들어야함.
-        return postCategoryRepository.findOneByName(categoryName).orElseThrow(RuntimeException::new);
+    public Optional<PostCategory> findCategoryByCategoryName(String categoryName) {
+        return postCategoryRepository.findOneByName(categoryName);
+    }
+
+
+    public Optional<Post> findByIdAndCategoryId(Long postId, Long categoryId) {
+        return postRepository.findByIdAndPostCategoryId(postId, categoryId);
     }
 }

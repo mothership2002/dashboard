@@ -1,6 +1,7 @@
 package hyun.post.dashboard.controller;
 
 import hyun.post.dashboard.aop.annotation.InboundContent;
+import hyun.post.dashboard.exception.NotMatchArgumentException;
 import hyun.post.dashboard.model.common.CommonResponse;
 import hyun.post.dashboard.model.dto.PostDto;
 import hyun.post.dashboard.service.PostService;
@@ -18,10 +19,22 @@ public class PostController {
 
     @PostMapping("/{categoryName}")
     @InboundContent(PostDto.class)
-    public ResponseEntity<?> createPost(@RequestBody PostDto postDto, @PathVariable String categoryName) {
+    public ResponseEntity<?> createPost(@RequestBody PostDto postDto,
+                                        @PathVariable String categoryName) {
+        if (!categoryName.equals(postDto.getCategoryName())) {
+            throw new NotMatchArgumentException();
+        }
         return new ResponseEntity<>(new CommonResponse<>(
                 "success", postService.create(postDto)),
                 HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{categoryName}/{postId}")
+    public ResponseEntity<?> getPost(@PathVariable String categoryName,
+                                     @PathVariable Long postId) {
+        PostDto post = postService.findByIdAndCategoryName(postId, categoryName);
+        return new ResponseEntity<>(new CommonResponse<>("success", post)
+                , HttpStatus.OK);
     }
 
 }
