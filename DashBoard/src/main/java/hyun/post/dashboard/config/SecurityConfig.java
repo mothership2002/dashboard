@@ -1,6 +1,9 @@
 package hyun.post.dashboard.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hyun.post.dashboard.component.RequestLog;
+import hyun.post.dashboard.filter.InboundRequestFilter;
+import hyun.post.dashboard.filter.TaskTimeFilter;
 import hyun.post.dashboard.security.encrypt.EncryptionProvider;
 import hyun.post.dashboard.security.filter.AuthenticationLoginFilter;
 import hyun.post.dashboard.security.filter.CustomExceptionFilter;
@@ -10,13 +13,11 @@ import hyun.post.dashboard.security.manager.CustomAuthorizationManager;
 import hyun.post.dashboard.security.provider.CustomAuthenticationProvider;
 import hyun.post.dashboard.security.provider.JwtProvider;
 import hyun.post.dashboard.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,16 +28,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
-import org.springframework.security.web.access.intercept.RequestMatcherDelegatingAuthorizationManager;
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.session.DisableEncodeUrlFilter;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    private final RequestLog requestLog;
     private final AuthenticationConfiguration config;
     private final CustomFailureHandler failureHandler;
     private final CustomSuccessHandler successHandler;
@@ -64,9 +65,11 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth.anyRequest().access(authorizationManager))
+                .addFilterBefore(taskTimeFilter(), DisableEncodeUrlFilter.class)
                 .addFilterBefore(customExceptionFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(authenticationLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(inboundRequestFilter(), UsernamePasswordAuthenticationFilter.class) // 인바운드를 언제 체크할까?
                 .build();
         //TODO 각종 필터 달아야함
     }
@@ -113,8 +116,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AnonymousAuthenticationFilter anonymousAuthenticationFilter() throws Exception {
+    public AnonymousAuthenticationFilter anonymousAuthenticationFilter() {
         return new AnonymousAuthenticationFilter("key", "anonymousUser",
                 AuthorityUtils.createAuthorityList("ANONYMOUS"));
+    }
+
+    @Bean
+    public InboundRequestFilter inboundRequestFilter() {
+        return new InboundRequestFilter(requestLog);
+    }
+
+    @Bean
+    public TaskTimeFilter taskTimeFilter() {
+        return new TaskTimeFilter();
     }
 }

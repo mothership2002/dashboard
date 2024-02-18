@@ -10,11 +10,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class MvcConfig implements WebMvcConfigurer {
 
-    private final TaskTimeInterceptor taskTimeInterceptor;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(taskTimeInterceptor)
-                .addPathPatterns("/**");
-    }
+//    private final TaskTimeInterceptor taskTimeInterceptor;
+//
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(taskTimeInterceptor)
+//                .addPathPatterns("/**");
+//    }
 }
