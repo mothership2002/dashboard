@@ -41,7 +41,7 @@ public class CustomAuthorizationManager implements AuthorizationManager<RequestA
     public AuthorizationDecision check(Supplier<Authentication> authentication, RequestAuthorizationContext context) {
         Collection<? extends GrantedAuthority> authorities = authentication.get().getAuthorities();
         // 2차원배열로 포문이 돌아가는 단점 있음. -> 시간복잡도 증가
-        // 최적화가 힘들지 않을까 싶다
+        // 리소시스 관련으로 롤의 역할을 줄여놓음 -> 1차원배열로 낮춤
         for (GrantedAuthority auth : authorities) {
             for (RequestMatcher matcher : resourceMap.get(auth.getAuthority())) {
                 if (matcher.matcher(context.getRequest()).isMatch()) {
